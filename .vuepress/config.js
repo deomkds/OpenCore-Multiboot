@@ -3,7 +3,7 @@ const {
 } = require('../package')
 
 module.exports = {
-    title: 'OpenCore Multiboot',
+    title: 'Multiboot com o OpenCore',
     head: [
         ['meta', {
             name: 'theme-color',
@@ -38,48 +38,46 @@ module.exports = {
 
     themeConfig: {
         lastUpdated: true,
-        repo: 'https://github.com/dortania/OpenCore-Multiboot',
+        repo: 'https://github.com/deomkds/OpenCore-Multiboot',
 		editLinks: true,
-		editLinkText: 'Help us improve this page!',
+		editLinkText: 'Ajude-nos a melhorar esta página!',
         logo: 'homepage.png',
         nav: [{
-            text: 'Dortania Guides',
+            text: 'Outros Guias',
             ariaLabel: 'Language Menu',
             items: [{
-                text: 'Home Site',
+                text: 'Site Original (em inglês)',
                 link: 'https://dortania.github.io/'
             },
             {
-                text: 'OpenCore Install Guide',
-                link: 'https://dortania.github.io/OpenCore-Install-Guide/'
+                text: 'Primeiros Passos com a ACPI',
+                link: 'https://deomkds.github.io/Getting-Started-With-ACPI/'
             },
             {
-                text: 'OpenCore Post-Install',
-                link: 'https://dortania.github.io/OpenCore-Post-Install/'
+                text: 'Guia de Instalação do OpenCore',
+                link: 'https://deomkds.github.io/OpenCore-Install-Guide/'
             },
             {
-                text: 'Wireless Buyers Guide',
-                link: 'https://dortania.github.io/Wireless-Buyers-Guide/'
+                text: 'Pós-instalação do OpenCore',
+                link: 'https://deomkds.github.io/OpenCore-Post-Install/'
             },
             {
-                text: 'GPU Buyers Guide',
-                link: 'https://dortania.github.io/GPU-Buyers-Guide/'
+                text: 'Guia de Compra de GPUs',
+                link: 'https://deomkds.github.io/GPU-Buyers-Guide/'
             },
             {
-                text: 'Anti Buyers Guide',
-                link: 'https://dortania.github.io/Anti-Hackintosh-Buyers-Guide/'
-            }
+                text: 'Guia de Compra de Wi-Fi',
+                link: 'https://deomkds.github.io/Wireless-Buyers-Guide/'
+            },
+            {
+                text: 'Guia de Compra Anti-Hackintosh',
+                link: 'https://deomkds.github.io/Anti-Hackintosh-Buyers-Guide/'
+            },
             ]
         },
-            /*
-              {
-                text: 'Github',
-                link: 'https://github.com/dortania/OpenCore-Install-Guide'
-              }
-            */
         ],
         sidebar: [{
-	            title: 'Multiboot with OpenCore',
+	            title: 'Multiboot com o OpenCore',
                 collapsable: false,
                 sidebarDepth: 0,
                 children: [
@@ -87,61 +85,61 @@ module.exports = {
                 ]
 	        },
 		{
-            title: 'For experienced users who already dealt with multibooting',
+            title: 'Para usuários experientes que já lidaram com multiboot',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['QUICK', 'Quick! I know what do, just tell me already HOW'],
+                ['QUICK', 'Rápido! Eu sei o que fazer, só me diga COMO!'],
             ]
 
         },
 		{
-            title: 'Introduction to multi-booting',
+            title: 'Introdução ao boot múltiplo',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['/Intro/Def', 'What is it?'],
-				['/Intro/Booting-part', 'UEFI? Legacy? CSM? What?'],
-				['/Intro/disc', 'Disclaimer'],
+                ['/Intro/Def', 'O que é isso?'],
+				['/Intro/Booting-part', 'UEFI? Legado? CSM? O quê?'],
+				['/Intro/disc', 'Aviso'],
             ]
 
         },
 		{
-            title: 'Multibooting Situations',
+            title: 'Situações de Multiboot',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['/empty/', 'Multibooting Situations'],
+                ['/empty/', 'Situações de Multiboot'],
 				{
             	collapsable: false,
             	sidebarDepth: 1,
 	            children: [
-	                ['/empty/samedisk', 'One disk - multiple OSes'],
-					['/empty/diffdisk', 'Multiple disks - multiple OSes'],
+	                ['/empty/samedisk', 'Uma Unidade com Múltiplos Sistemas'],
+					['/empty/diffdisk', 'Múltiplas Unidades com Múltiplos Sistemas'],
 	            ]
 				},
-				['/exist/', 'Existing Filled Disk'],
+				['/exist/', 'Unidade Existente Cheia'],
 				{
             	collapsable: false,
             	sidebarDepth: 1,
 	            children: [
-	                ['/exist/data', 'On a filled non-OS related disk (Data disk)'],
-					['/exist/os', 'On a filled OS related disk (Windows/Linux)'],
+	                ['/exist/data', 'Em uma unidade cheia que contém dados'],
+					['/exist/os', 'Em uma unidade cheia que contém sistemas (Windows/Linux)'],
 	            ]
 				},
             ]
 
         },
 		{
-            title: 'OpenCore configuration',
+            title: 'Configuração do OpenCore',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                ['/oc/win', 'For Windows booting'],
-				['/oc/linux', 'For Linux booting'],
-				['/oc/duet', 'Installing OpenCore on a legacy system'],
-				['https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap.html', 'Using LauncherOption'],
-				['https://dortania.github.io/OpenCore-Post-Install/multiboot/bootcamp.html', 'BootCamp installation'],
+                ['/oc/win', 'Para Iniciar o Windows'],
+				        ['/oc/linux', 'Para Iniciar o Linux'],
+				        ['/oc/duet', 'Instalando o OpenCore em um PC antigo'],
+				        ['https://deomkds.github.io/OpenCore-Post-Install/multiboot/bootstrap.html', 'Usando o LauncherOption'],
+				        ['https://deomkds.github.io/OpenCore-Post-Install/multiboot/bootcamp.html', 'Instalação do BootCamp'],
             ]
 
         },
