@@ -1,5 +1,3 @@
-# Dualbooting on empty drive(s)
+# Dualboot em Unidade(s) Vazia(s)
 
-This section will show you the tips and tricks of installing different OSes on empty drive(s) like on a newly built desktop or a FreeDOS laptop. It will contain information on the install order and technicalities of dualbooting. This is not limited to macOS only, it can be also helpful for multibooting other OSes with each other.
-
-Let's get started...
+Essa seção mostrará as dicas e truques para instalar diferentes sistemas operacionas em unidades vazias, como em um desktop recém montado ou um notebook com ~~EndlessOS~~ FreeDOS. Este guia conterá informações sobre a ordem de instalação e outras tecnicalidades do dualboot e não se limita somente ao macOS, podendo ser útil também para fazer dualboot de outros sistemas com outros sistemas.
