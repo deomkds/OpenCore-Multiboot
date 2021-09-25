@@ -1,17 +1,17 @@
-# Dualbooting on different disks
+# Dualboot em Unidades Diferentes
 
-I will not get too long in this part as it's the EASIEST one:
+Como essa parte é a mais fácil de todas, não será preciso estender demais:
 
-* Install macOS on one of the disks
-* Install $(SECONDOS) on the other disk
-* Install/copy OpenCore on the macOS disk EFI
-* You're good to go
+* Instale o macOS em uma das unidades.
+* Instale o outro sistema em outra unidade.
+* Instale/copie o OpenCore para a partição EFI da unidade que contém o macOS.
+* Pronto.
 
-Things to keep in mind:
+Coisas a se observar:
 
-- Windows can be a bitch when it comes to multidisk setups (it freaks out when it sees a lot of EFI partitions on a lot of disks)
-- If the above happens, disable/disconnect all the other disks and install windows as you would normally do
-  - For laptops this can be a pain, you can install windows manually by following [this guide from TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html)
-  - Make sure you choose the proper disk
-- You can still refer to other situations if you want to dualboot more than one OS on one of the disks.
-- Make sure that OpenCore is on the same disk of macOS for easier troubleshooting and cleaner setup
+- O Windows pode ser um pé no saco quando a configuração possui mais de uma unidade (ele fica doido quando vê muitas partições EF em muitas unidades).
+- Caso isso afete você, desative/desconecte todas as outras unidades e instale o Windows normalmente.
+  - Em notebooks, isso pode ser um problema. É possível instalar o Windows manualmente seguindo [este guia no TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html) (em inglês).
+  - Certifique-se de escolher a unidade correta.
+- Você ainda pode consultar as outras situações caso queira fazer dualboot de mais de um sistema em algumas das unidades.
+- Certifique-se de que o OpenCore está na mesma unidade do macOS para facilitar a solução de problemas e para obter uma configuração mais limpa.
