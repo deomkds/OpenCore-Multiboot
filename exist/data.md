@@ -1,50 +1,50 @@
-# On a filled non-OS related disk (Data disk)
+# Em Unidades Que Contém Dados Diversos (Unidade de Dados)
 
-This is quite easy, basically we'll just make some space for an EFI (if it doesn't exist already) and some for our macOS system.
+Isso é bastante simples. Basicamente, abriremos espaço para uma partição EFI (caso ainda não exista) e para o macOS.
 
-## Precautions
+## Precauções
 
-- BACKUP YOUR DATA
-- If possible, disconnect or disable any other disk/drive in your system, as it may interfere with our process. (keep only the target disk and/or the boot OS disk where we will do the operations from)
-- The drive isn't corrupted or have bad sectors
-- Your system is on pure UEFI setup, no CSM/Legacy OS installed
-- Stable power input
+- FAÇA BACKUP DOS SEUS DADOS
+- Se possível, desconecte ou desative quaisquer outras unidades do sistema, já que podem interferir com o procedimento de instalação (especialmente o Windows). Mantenha somente a unidade de destino e/ou a unidade de inicialização do sistema no qual serão realizadas as operações.
+- Verifique se a unidade não está corrompida ou possui setores defeituosos. 
+- Verifique se o computador está configurado para o modo UEFI puro, sem CSM/Legacy OS instalado.
+- Garanta que há uma fonte de energia estável, isto é, use uma tomada em vez da bateria do notebook, por exemplo.
 
-## Situation this applies for
+## Situações Aplicáveis
 
-- A disk with data that is not related to windows or linux or macOS
-- A disk that used to be for an OS but now it's just data
+- Uma unidade com dados que não sejam relacionados ao Windows, Linux ou macOS.
+- Uma unidade que tenha sido usada por um sistema operacional, mas agora armazena apenas dados.
 
 ---
 
-To start, we need to know what kind of partitioning scheme we're using, most new drives that are <1TB are usually MBR formatted (some 1TB drives still do) while anything bigger in size is GPT partitioned. As we saw before, macOS **requires** GPT and can't do without it.
+Para começar, será preciso saber que tipo de esquema de partição a unidade está usando. A maioria das unidades mais novas que possuem menos de 1TB de espaço usam MBR (algumas unidades de 1TB também) e qualquer coisa com tamanho maior usam GPT. Como vimos anteriormente, o macOS **exige** GPT e não funciona sem ele.
 
-Note: we do not speak of the MBR patch, that's a bad idea and really should not exist anymore since it doesn't make any sense when most 2006+ computers can easily boot a GPT drive without much issues.
+Observação: a primeira regra do Clube da Luta é "não fale sobre o patch de MBR". Esse patch é uma má ideia e não deveria existir mais, já que não faz o menor sentido quando a maioria dos computadores a partir de 2006 podem facilmente iniciar unidades em GPT sem muitos problemas.
 
-## Checking your disk partitioning scheme
+## Verificando o Esquema de Partição da Unidade
 
-#### In Windows
+#### No Windows
 
-- Open Disk Manager
-- Right click on the destination drive > *Properties*
+- Abra o Gerenciador de Discos
+- Clique com o botão direito na unidade de destino e selecione a opção *Propriedades*.
   ![img](../images/ex-data/mbvm.png)
-- Go to *Volumes* and check *Partition Style*
-  - **MBR** drives will show:
+- Acesse *Volumes* e verifique *Estilo de Partição*
+  - Unidades em **MBR** exibirão:
     
     ![image-20200825010342403](../images/ex-data/mbr_disk.png)
-  - **GPT** drives will show:
+  - Unidades em **GPT** exibirão:
     
     ![image-20200825010434237](../images/ex-data/gpt_disk.png)
 
-#### In Linux
+#### No Linux
 
-- Download and install `gdisk` if it's not already installed
+- Baixe e instale o `gdisk` caso não esteja instalado.
 
-- Run `lsblk` to list your disks and partitions and check the identifiers (eg: `/dev/sda` or `/dev/nvme0n1`) of your destination disk with data
+- Execute `lsblk` para listar as unidades e partições e verifique os identificadores (ex.: `/dev/sda` ou `/dev/nvme0n1`) da unidade de destino que contém dados.
 
-- Run `sudo gdisk -l <disk_identifier>` (eg: `sudo gdisk -l /dev/sda`)
+- Execute `sudo gdisk -l <disk_identifier>` (ex.: `sudo gdisk -l /dev/sda`).
 
-  - **MBR** disks will output:
+  - Unidades em **MBR** exibirão:
 
     ```
     Partition table scan:
@@ -54,7 +54,7 @@ Note: we do not speak of the MBR patch, that's a bad idea and really should not 
       GPT: not present
     ```
 
-  - **GPT** disks will output:
+  - Unidades em **GPT** exibirão:
 
     ```
     Partition table scan:
@@ -64,49 +64,49 @@ Note: we do not speak of the MBR patch, that's a bad idea and really should not 
       GPT: present
     ```
 
-#### In macOS
+#### No macOS
 
-- Run `diskutil list`
+- Execute `diskutil list` no Terminal.
 
-- Check the destination drive
+- Verifique a unidade de destino:
 
-  - **MBR** disks will have:
+  - Unidades em **MBR** exibirão:
 
     ```
        #:                       TYPE NAME                    SIZE       IDENTIFIER
        0:     FDisk_partition_scheme                        *SIZE GB   diskX
     ```
 
-  - **GPT** disks will have:
+  - Unidades em **GPT** exibirão:
 
     ```
        #:                       TYPE NAME                    SIZE       IDENTIFIER
        0:      GUID_partition_scheme                        *SIZE GB   diskX
     ```
 
-## Converting MBR to GPT
+## Convertendo de MBR para GPT
 
-**Note**: if your drive is **already GPT**, then **skip this section**.
+**Observação**: se a unidade **já estiver em GPT, pule esta parte**.
 
-#### Destructive Conversion
+#### Conversão Destrutiva
 
-This method will destroy all your data on your disk, making you a clean slate to work with. **Only use this if the data in the disk is not important or backed up already! YOUR DATA WILL BE GONE WITH THIS METHOD.** 
+Este método destruirá todos os dados da unidade, criando um quadro em branco para começar. **Apenas use este método se os dados contidos na unidade não forem importantes ou um backup já tenha sido feito! SEUS DADOS SERÃO APAGADOS DEFINITIVAMENTE COM ESSE MÉTODO**.
 
-You can use any partitioning tool of your choice and destroy the data, OR you can just boot macOS installer that you made with the OpenCore Dortania Guide and select the disk and format it. You can check [Dualbooting on the same disk](../empty/samedisk.md) section for more information. You're not required to follow the rest of this section.
+Você pode usar qualquer ferramenta de particionamento da sua escolha para destruir os dados, ou pode simplesmente iniciar o instalador do macOS que você criou com o Guia do Opencore, selecionar a unidade e formatá-la. Veja a seção [Dualboot na Mesma Unidade](../empty/samedisk.md) para obter mais informações. Não será necessário seguir o restante desse guia caso opte por este método.
 
-#### Non-Destructive Conversion
+#### Conversão Não Destrutiva
 
-This method has higher chances of keeping your data intact, **however this does NOT mean you can ignore backing up your data. BACKUP YOUR DATA!**
+Esse método possui chances maiores de manter seus dados intactos, **no entanto, isso NÃO significa que você pode deixar de fazer backups dos seus dados. FAÇA BACKUP DOS SEUS DADOS!**.
 
-We will be using `gdisk` ran on any linux distribution, I strongly NOT recommend using Windows or macOS gdisk to perform this operation as it may break seeing how Windows and macOS disk handling differs from Linux. You can use a USB distribution like `gparted` (lightweight iso/usb image) to do the manipulations or any distribution disk in hand (arch, Ubuntu, Fedora...).
+Usaremos o `gdisk` em qualquer distribuição Linux. Eu recomendo fortemente NÃO fazer essa operação na versão do `gdisk` para Windows ou macOS, pois as coisas podem dar errado tendo em vista que a maneira como o Windows e o macOS lidam com unidades difere do Linux. Você pode usar uma distribuição Linux USB como o `gparted` (image iso/usb image) para fazer a manupulação ou qualquer outra distribuição que tenha em mãos (arch, Ubuntu, Fedora...).
 
-- Download/Install `gdisk` following you distribution 
+- Baixe e instale o `gdisk` de acordo com as intruções da sua distribuição preferida.
 
-- Run `lsblk` to check for the destination drive identifiers
+- Execute o `lsblk` para verificar os identificadores da unidade de destino.
 
-- Run `sudo gdisk <identifier>` (eg: `sudo gdisk /dev/sda`)
+- Execute `sudo gdisk <identifier>` (ex.: `sudo gdisk /dev/sda`).
 
-- If your disk is MBR, you'll be greeted with:
+- Caso sua unidade esteja em MBR, será exibida esta mensagem:
 
   ```
   Partition table scan:
@@ -126,29 +126,29 @@ We will be using `gdisk` ran on any linux distribution, I strongly NOT recommend
   Command (? for help): 
   ```
 
-- Type `w` and press Enter/Return
+- Digite `w` e pressione Enter/Return.
 
-- Press `y` to confirm
+- Digite `y` para confirmar.
 
-- You're done.
+- Pronto.
 
-For those who want to other way around (from GPT to MBR) follow this [answer](https://superuser.com/questions/1250895/converting-between-gpt-and-mbr-hard-drive-without-losing-data).
+Para aqueles que queira o caminho contrário (de GPT para MBR), sigam este [link](https://superuser.com/questions/1250895/converting-between-gpt-and-mbr-hard-drive-without-losing-data) (em inglês).
 
-#### Verification
+#### Verificação
 
-Once your drive is converted, check again following the instruction above. You may want to reboot your computer before verifying.
+Uma vez que a unidade tenha sido convertida, verifique novamente seguindo as intruções acima. Talvez seja necessário reiniciar o computador antes de verificar.
 
-## Partitioning the Disk
+## Particionando a Unidade
 
-Once you converted (or already formated) your disk is GPT, it is time to repartition it for macOS partition and the EFI partition if there isn't. 
+Uma vez convertida (ou já formatada) para GPT, é hora de reparticioná-la para criar as partições do macOS e EFI caso ainda não existam.
 
-### Checking the disk existing partitions:
+### Verificando as Partições Existentes na Unidade
 
-Just because the disk is now GPT partitioned, it doesn't mean that macOS will accept it, macOS's HFS Plus (Mac OS Journaled File System) or APFS won't accept formatting it and will return an error with `MediaKit reports not enough space on device for requested operation`, this is because either there is no EFI partition or it's not large enough. Either way, if you're just using a disk with non-OS data, chances are you do not have that partition and we will have to make one.
+Só porque a unidade está particionada em GPT, não significa que o macOS a aceitará imediatamente. Caso não haja uma partição EFI ou ela não seja grande o suficiente, o macOS se recusará a formatar as partições em HFS+ (Mac OS Extendido (Reg. Cronológico)) ou em APFS. Uma mensagem de erro será exibida, dizendo que o `MediaKit reporta não haver espaço suficiente no dispositivo para a operação solicitada`. De qualquer forma, caso esteja usando uma unidade que contenha apenas dados comuns que não estejam relacionados a sistemas operacionais, há grandes chances de não existir uma partição EFI, então teremos que criar uma.
 
-With that said, we still need to determine if it's required or not:
+Tendo dito isso, ainda é preciso determinar se ela é necessária ou não.
 
-#### In Windows
+#### No Windows
 
 - Open Disk Manager
 - Check your destination disk
