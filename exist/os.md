@@ -1,3 +1,5 @@
-# On a filled OS related disk (Windows/Linux)
+# Em uma Unidade Que Contém Dados de Sistemas Operacionais (Windows/Linux)
 
-**Work in Progess**, you can help contibute via [PRs](https://github.com/dortania/OpenCore-Multiboot/pulls)
+**Em construção.**
+
+Nota do tradutor: será atualizado quando a versão original em inglês receber algum conteúdo,
