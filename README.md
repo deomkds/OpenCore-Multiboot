@@ -1,29 +1,29 @@
-# Multiboot with OpenCore
+# Multiboot com o OpenCore
 
-Hello there! Looks like you're trying to get macOS and `$(OtherOS)` installed on your system, but you also do not want to mess `$(OtherOS)` or macOS in the process. You will be guided here through a multitude of steps to achieve just that while keeping the OS setups as unaffected as possible.
+Olá! Parece que você está tentando instalar o macOS e mais algum sistema operacional no seu computador, mas não quer bagunçar o outro sistema operacional ou o macOS no caminho. Aqui, você será guiado através dos vários passos necessários para tal, sem afetar muito os sistemas operacionais já configurados.
 
-## Firmware Types
+## Tipos de Firmware
 
-Multibooting is greatly affected by the type of firmware you're running. This guide will cover the known 2 types which are:
+O multiboot é afetador fortemente pelo tipo de firmware do seu computador. Este guia abordará os dois tipos conhecidos, que são:
 
 - UEFI
 - Legacy/CSM/BIOS
 
-The differences are minimal once you're using OpenCore but also it might be a bit difficult for the latter. Other than that, this guide will cover these elements:
+As diferenças são mínimas uma vez que estiver usando o OpenCore, mas também pode ser um pouco difícil no último caso. Este guia abordará os seguintes elementos:
 
-1. What is multibooting and how does it work?
-2. Partitioning vs Disk separating
+1. O que é multiboot e como ele funciona?
+2. Particionando vs Separando Unidades
 2. UEFI
-   1. One disk for all OSes
-   2. Different disks for different OSes
-3. Legacy
-   1. One disk for all OSes
-   2. Different disks for different OSes
-5. Troubleshooting
-6. Tips and Tricks
+   1. Uma unidade para todos os sistemas.
+   2. Unidades diferentes para sistemas diferentes.
+3. Legacy (também referido como legado, antigo, BIOS etc.)
+   1. Uma unidade para todos os sistemas.
+   2. Unidades diferentes para sistemas diferentes.
+5. Solução de Problemas
+6. Dicas e Truques
 
-### Disclaimer
+### Aviso Importantíssimo
 
-We are not responsible for bricked devices, dead hard drives, thermonuclear war, or you getting fired because you got a kernel panic and didn't save your work. You are responsible for reading everything carefully before you do anything. Do your research and ask for support if you have any questions or issues before trying random things on the internet because "it's the internet". If you do, YOU are choosing to follow random things on the internet, and if YOU point the finger at us for messing up your device, WE will laugh at you. 
+Não somos responsáveis por dispositivos *brickados*, discos rígidos mortos, guerra termonuclear, ou sua demissão por ter tido um *kernel panic* e perdido seu trabalho. Você é o único responsável por ler tudo com bastante cuidado antes de tentar qualquer coisa. Faça suas pesquisas e peça ajuda caso tenha questionamentos ou problemas antes de tentar coisas aleatórias que você viu na internet simplesmente porque "se está na internet é verdade". Caso você faça isso, VOCÊ e somente você está escolhendo, por conta própria, seguir coisas aleatórias na internet. Se VOCÊ apontar o dedo para nós por estragar seu computador, NÓS riremos de você.
 
-Now that we got that out of our way let's get going, and good luck.
+Agora que tiramos isso do caminho, você está pronto para começar. Boa sorte!
