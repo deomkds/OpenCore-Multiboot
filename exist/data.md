@@ -150,29 +150,29 @@ Tendo dito isso, ainda é preciso determinar se ela é necessária ou não.
 
 #### No Windows
 
-- Open Disk Manager
-- Check your destination disk
-  - In case your disk already contains an EFI partition: (usually if your disk was already GPT or formatted before)
+- Abra o Gerenciador de Discos,
+- Verifique a unidade de destino.
+  - Caso a unidade já contenha uma partição EFI: (geralmente acontece se a unidade já tenha sido formatada como GPT antes)
     ![img](../images/ex-data/gpt_efi.png)
-    - You'll see a description with `(EFI SYSTEM PARTITION)` 
-    - The size of this partition is usually between 100MB and 500MB (any more and it's a waste of storage space)
-      - In case the size of it is <200MB, **expand** the partition to 200MB (or a bit more)
-      - In case the size of it is >500MB, **shrink** the partition to 500MB (or 200MB) because it's a waste of space
-      - In case you have multiple partitions with `EF00`, that means your partitioning is bad, you only really need just 1 EFI partition in the whole system (if not per disk, there is no real need for multiple EFI partitions, makes no sense)
-  - In case your disk doesn't contain an EFI partition:
+    - Você verá uma descrição como `(EFI SYSTEM PARTITION)` 
+    - Geralmente, o tamanho da partição fica entre 100MB e 500MB (mais do que isso e já é desperdício de espaço de armazenamento).
+      - Caso o tamanho seja menor que 200MB, **aumente-a** para 200MB (ou um pouquinho mais).
+      - Caso o tamanho seja maior que 500MB, **diminua-a** para 500MB (ou 200MB) porque é um desperdício de espaço.
+      - Caso existam múltiplas partições com a *flag* `EF00`, significa que o esquema de partição não está legal. Você só precisa de uma partição EFI no computador todo (por unidade também funciona, mas não existe motivo real para ter múltiplas partições EFI, não faz sentido).
+  - Caso a unidade não contenha nenhuma partição EFI:
     ![img](../images/ex-data/gpt_noefi.png)
 
-#### In Linux
+#### No Linux
 
-- Download/Install `gdisk` following you distrubution 
+- Baixe e instale o `gdisk` de acordo com as instruções da sua distribuição.
 
-- Run `lsblk` to check for the destination drive identifiers
+- Execute o `lsblk` para descobrir os identificadores da unidade de destino.
 
-- Run `sudo gdisk <identifier>` (eg: `sudo gdisk /dev/sda`)
+- Execute `sudo gdisk <identifier>` (ex.: `sudo gdisk /dev/sda`).
 
-- When gdisk starts, send `p`
+- Quando o `gdisk` iniciar, digite `p`.
 
-  - In case your disk already contains an EFI partition: (usually if your disk was already GPT or formatted before)
+  - Caso a unidade já contenha uma partição EFI: (geralmente acontece se a unidade já tenha sido formatada como GPT antes)
 
     ```
     Command (? for help): p
@@ -187,19 +187,19 @@ Tendo dito isso, ainda é preciso determinar se ela é necessária ou não.
     Total free space is 10261 sectors (5.0 MiB)
     
     Number  Start (sector)    End (sector)  Size       Code  Name
-       1            2048          800767   390.0 MiB   EF00  EFI          // We're interested in this
+       1            2048          800767   390.0 MiB   EF00  EFI          // Estamos interessados nessa linha.
        2          800808       213967975   101.6 GiB   AF0A  
-       ... // Other partitions 
+       ... // Outras partições.
     ```
 
-    - You'll find a partition with code `EF00` meaning it's marked as an EFI System Partition
-      - The EFI partition does not need to be the first, it can be anywhere in the disk partitioning order, the `Code` of it is what matters the most
-    - The size of this partition is usually between 100MB and 500MB (any more and it's a waste of storage space)
-      - In case the size of it is <200MB, **expand** the partition to 200MB (or a bit more)
-      - In case the size of it is >500MB, **shrink** the partition to 500MB (or 200MB) because it's a waste of space
-      - In case you have multiple partitions with `EF00`, that means your partitioning is bad, you only really need just 1 EFI partition in the whole system (if not per disk, there is no real need for multiple EFI partitions, makes no sense)
+    - Você encontrará uma partição com o código `EF00`, o que significa que ela está marcada para ser a partição EFI do sistema.
+      - A partição EFI não precisa ser a primeira. Ela pode vir em qualquer ordem na unidade particionada. O `Code` é o que mais importa.
+    - Geralmente, o tamanho da partição fica entre 100MB e 500MB (mais do que isso e já é desperdício de espaço de armazenamento).
+      - Caso o tamanho seja menor que 200MB, **aumente-a** para 200MB (ou um pouquinho mais).
+      - Caso o tamanho seja maior que 500MB, **diminua-a** para 500MB (ou 200MB) porque é um desperdício de espaço.
+      - Caso existam múltiplas partições com a *flag* `EF00`, significa que o esquema de partição não está legal. Você só precisa de uma partição EFI no computador todo (por unidade também funciona, mas não existe motivo real para ter múltiplas partições EFI, não faz sentido).
 
-  - In case your disk doesn't contain an EFI partition:
+  - Caso a unidade não contenha uma partição EFI:
 
     ```
     Command (? for help): p
@@ -214,13 +214,13 @@ Tendo dito isso, ainda é preciso determinar se ela é necessária ou não.
     Total free space is 2669 sectors (1.3 MiB)
     
     Number  Start (sector)    End (sector)  Size       Code  Name
-       1            2048       250068991   119.2 GiB   0700  peepee       // a partition
-       ... // Other partitions that are not EFIs 
+       1            2048       250068991   119.2 GiB   0700  peepee       // Uma partição.
+       ... // Outras partições que não são EFI.
     ```
 
-    - There are no `EF00` partitions meaning we need to make one
+    - Não há uma partição com o código `EF00`, o que significa que deveremos criar uma.
 
-#### In macOS
+#### No macOS
 
 - Run `diskutil list`
 
