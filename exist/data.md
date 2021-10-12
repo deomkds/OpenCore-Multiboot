@@ -222,160 +222,162 @@ Tendo dito isso, ainda é preciso determinar se ela é necessária ou não.
 
 #### No macOS
 
-- Run `diskutil list`
+- Execute `diskutil list`
 
-  - Optionally you can add `diskX` with X as the identifier of the target disk if you don't want a big list of partitions and disks shown up, in most cases the disk numbers change from a system boot to another, so don't rely on it too much.
+  - Opcionalmente, pode-se adicionar `diskX` substituindo o X pelo identificador da unidade alvo caso não queira ver uma lista gigante de partições e unidades. Na maioria dos casos, o identificador da unidade muda de uma inicialização para outra, então não confie muito nele.
 
-- Check your destination disk listing:
+- Verifique a listagem de unidades de destino:
 
-  - In case your disk contain an EFI partition:
+  - Caso a unidade contenha uma partição EFI:
 
     ```
-    /dev/diskX (does not matter):
+    /dev/diskX (não importa):
        #:                       TYPE NAME                    SIZE       IDENTIFIER
-       0:      GUID_partition_scheme                         *SIZE*     diskX      // GPT disk
-       1:                        EFI ESP                     209.7 MB   diskXs1    // Look for this
-       2:                    FORMAT1 Part1                   *SIZE*     diskXs2    // a partition
-         ... // Other stuff that aren't TYPE: EFI
+       0:      GUID_partition_scheme                         *SIZE*     diskX      // unidade em GPT
+       1:                        EFI ESP                     209.7 MB   diskXs1    // procure por esta
+       2:                    FORMAT1 Part1                   *SIZE*     diskXs2    // uma partição
+         ... // Outras coisas que não são TYPE: EFI
     ```
 
-    - We see a partition with `TYPE` as `EFI`, which means a disk with an EFI partition (and as you can see it's 200MB)
-    - The size of this partition is usually between 100MB and 500MB (any more and it's a waste of storage space)
-      - In case the size of it is <200MB, **expand** the partition to 200MB (or a bit more)
-      - In case the size of it is >500MB, **shrink** the partition to 500MB (or 200MB) because it's a waste of space
-      - In case you have multiple partitions with `EF00`, that means your partitioning is bad, you only really need just 1 EFI partition in the whole system (if not per disk, there is no real need for multiple EFI partitions, makes no sense)
+    - Vemos uma partição com `TYPE` como `EFI`, o que significa que a unidade contém uma partição EFI (e como pode ver, ela tem 200MB).
+    - O tamanho dessa partição fica geralmente entre 100MB e 500MB (mais do que isso é desperdício de espaço)
+      - Caso o tamanho seja menor do que 200MB, **expanda** a partição para 200MB (ou um pouquinho mais).
+      - Caso o tamanho seja maior que 500MB, **diminua** a partição para 500MB (ou 200MB) pois é um desperdício de espaço.
+      - Caso existam múltiplas partições `EF00`, significa que o esquema de partição está ruim. Só é necessário uma partição EFI para todo o sistema (ou por disco, mas não há necessidade para múltiplas partições EFI).
 
-  - In case your disk doesn't contain an EFI partition:
+  - Caso a unidade não contenha uma partição EFI:
 
     ```
-    /dev/diskX (does not matter):
+    /dev/diskX (não importa):
        #:                       TYPE NAME                    SIZE       IDENTIFIER
-       0:      GUID_partition_scheme                         *SIZE*     diskX      // GPT disk
-       1:       Microsoft Basic Data poopoo                  128.0 GB   diskXs1    // a partition
-         ... // Other stuff that aren't TYPE: EFI
+       0:      GUID_partition_scheme                         *SIZE*     diskX      // unidade em GPT
+       1:       Microsoft Basic Data poopoo                  128.0 GB   diskXs1    // uma partição
+         ... // Outras coisas que não são TYPE: EFI
     ```
 
-    - There are no partitions with `TYPE` as `EFI`, although the disk is GPT, meaning we need to make one.
+    - Não existem partições com `TYPE` como `EFI`, embora a unidade esteja em GPT, o que signigica que será preciso criar uma.
 
-### In case you have an EFI partition
+### Caso Já Exista uma Partição EFI
 
-Congratulations, you can go ahead and partition your disk for macOS and be on your merry way, check the **Partitioning for macOS** section.
+Parabéns, você já pode continuar com o particionamento da unidade para o macOS e seguir seu caminho. Veja a seção **Particionando para o macOS**.
 
-### In case you do not have an EFI partition
+### Caso Não Exista uma Partição EFI
 
-We'll have to make one, and the OSes that we will use will be either Windows or Linux (macOS is kind of a pain in the ass, not going to bother with it).
+Será preciso criar uma usando o Windows ou o Linux (o macOS é um pé no saco, nem vamos nos o trabalho).
 
-#### In Windows
+#### No Windows
 
-We'll be using a disk managing software named `Minitool Partition Wizard`, ngl, it does look shady af and kind of like malware (and won't be surprised if it is). There are other alternatives like `Easeus Partition Master` (that suspiciously look like MPW 🤔) and `AOMEI Partition Assistant` (that also looks like the other two ***🤔 intensifies***), and many more but these are the most popular windows disk managers.
+Será preciso utilizar um software de gerenciamento de unidades chamado `Minitool Partition Wizard`. Não  vou mentir, é suspeito pra cacete e meio que se parece com malware (e não fique surpreso se for). Existem outras alternativas como o `Easeus Partition Master` (que se parece muito com o MPW 🤔) e o `AOMEI Partition Assistant` (que também se parece com os outros dois ***🤔 intensifica***), e muitas outras alternativas, mas esses são os gerenciadores de unidades mais populares no Windows.
 
-##### But where is muh GpArTeD?
+Nota do tradutor: caso você tenha alguma desenvoltura com essas coisas de partição, esqueça esses Minitool, EASEUS ou AOMEI da vida e use o [DiskGenius](https://www.diskgenius.com). É chinês e, portanto, meio desengonçado, mas é excelente. E o melhor de tudo é que não é malware (eu acho).
 
-The reason why I'm not recommending Gparted with NTFS partitions is that it might corrupt the partition easier than when Windows deals with it. I personally didn't have to deal much with corrupt NTFS partitions (I did once or twice) and Windows will surely fix them, but a lot of users reported unrecoverable partitions or data from using Gparted, not blaming Gparted, but using Windows with its own FS is safer than hoping ntfs-3g doesn't fuck up, that being said though, I'll post a Gparted guide below under `Linux` section, and if you already dealt with Gparted, I think you might know what to do.
+##### Mas Cadê o Meu GpArTeD?
 
-In this section I'll be using MPW, the other tools are very similar and have very similar menus, you can follow up with them just fine. In this case, I will be using an external disk for the partitioning, it does not change anything about the internal disk, the same procedure goes for any disk.
+O motivo para não recomendar o GParted para manipular partições em NTFS é que ele pode corromper a partição mais facilmente do que o Windows. Eu pessoalmente não tive que lidar muito com partições NTFS corrompidas (fiz uma vez ou duas) e o Windows com certeza as conserta, mas muitos usuários reportaram partições ou dados irrecuperáveis depois de usar o GParted. Não é para culpar o programa, mas usar o Windows para lidar com seu próprio sistema de arquivos é mais seguro do que rezar para o ntfs-3g não fazer merda. Tendo dito isso, vou postar um guia usando o GParted mais abaixo, na seção `Linux`. Caso você já tenha lidado com ele, acredito que saberá o que fazer.
 
-- Download the ~~malware~~ partition manager of your choice (MPW here)
+Nessa seção, será preciso usar o Minitool Partition Wizard (MPW daqui pra frente). As outras ferramentas são bastante similares e possuem menus bem parecidos, então dá pra seguir este guia usando elas também. Neste exemplo, particionaremos uma unidade externa, mas nada muda caso esteja usando uma unidade interna. O mesmo procedimento vale para toda e qualquer unidade.
 
-- Install the ~~malware~~ partition manager and **keep an eye on the adware and extra "apps" that they install, Chrome, Opera, some shady AV and so on**
+- Baixe o ~~malware~~ gerenciador de partições da sua escolha (aqui será o MPW).
 
-- Run the application as Administrator
+- Instale o ~~malware~~ gerenciador de partições e **fique de olho para não instalar o adware e os "apps" extras como o Chrome, o Opera ou algum antivírus suspeito.**
 
-- Right Click on the target disk first partition and shrink it by 200MB (and bit more)
-  ![Screenshot 2020-09-15 235910](../images/ex-data/mv-rsz.png)
-  ![Screenshot 2020-09-16 000113](../images/ex-data/resizing.png)
+- Execute o aplicativo com permissões de administrador.
 
-  - Note: because of the trashy software, here is how to do it properly:
-    - change the size view from **GB** to **MB**
-    - select the partition size and **press down arrow key** on your keyboard to lower its value
-    - usually the Space After will be filled
-    - once you hit your mark (say 220MB) select the Unallocated Space After section and **press down arrow key**
-    - you'll see the Unallocated Space Before being filled
-  - Note2: Moving the big slider will just create weird numbers and it's trash, so deal with it
-  - Note3: I don't know if other partitioning software are this trash
+- Clique com o botão direito na primeira partição da unidade alvo e diminua seu tamanho para 200MB (e um pouquinho mais):
+  ![Malware](../images/ex-data/mv-rsz.png)
+  ![Vírus](../images/ex-data/resizing.png)
 
-- Once done, press apply on wherever the software shows you (in this version it's under the Operation Pending list, older releases had a dedicated button at the top of it, so check carefully the UI as it changes over time)
+  - Observação: por causa do software mal feito, aqui estão os passos necessários para fazer tudo da forma certa:
+    - mude a visualização de tamanho para **GB** ou **MB**.
+    - selecione o tamanho da partição e **pressione seta para baixo** no seu teclado para reduzir o valor.
+    - geralmente o Espaço Após já estará preenchido.
+    - assim que alcançar o valor certo (uns 220MB), selecione a seção Espaço Não Alocado Após e **pressione seta para baixo**.
+    - você verá que o Espaço Não Alocado Antes se preencherá.
+  - Observação 2: mover o controle deslizante apenas criará números aleatórios e é uma porcaria, então use as setas no teclado.
+  - Observação 3: eu não sei se outros softwares de particionamento são tão ruins assim (Nota do Tradutor: não são; use o [DiskGenius](https://www.diskgenius.com) se possível).
 
-  ![Screenshot 2020-09-16 002725](../images/ex-data/applypending.png)
+- Uma vez feito isso, clique em Apicar ou seja lá o que o software mostrar (nessa versão, fica na lista de Operações Pendentes, mas versões antigas possuem um botão dedicado no topo, então procure com cuidado já que a interface muda ao longo do tempo).
 
-- **THIS PROCESS WILL TAKE TIME DEPENDING ON THE DATA ON YOUR DRIVE AND IF IT'S AN SSD OR A SPINNING RUST (HDD), DO NOT CANCEL IT UNDER ANY CIRCUMSTANCES OTHERWISE YOU'LL KILL YOUR DATA BYE BYE. YOU'VE BEEN WARNED!**
+  ![Adware](../images/ex-data/applypending.png)
 
-- You now have **empty space before the first partition**, this space will be used to create an EFI partition
+- **ESSE PROCESSO PODE DEMORAR DEPENDENDO DA QUANTIDADE DE DADOS QUE EXISTE NA UNIDADE E SE ELA É UM SSD OU UM DISCO ROTATIVO (HD). NÃO CANCELE EM HIPÓTESE ALGUMA, CASO CONTRÁRIO VOCÊ DESTRUIRÁ TODOS OS SEUS DADOS PARA SEMPRE. VOCÊ FOI AVISADO!**
 
-  - Due to MPW managers being assholes, creating an EFI partition is now a paid feature
-  - If you have an old version (9 or older) you can do that for free
+- Agora que há **espaço vazio antes da primeira partição**, ele será usado para criar a partição EFI.
 
-- Once the operations are done:
+  - Devido aos gerenciadores MPW serem cuzões, criar uma partição EFI agora é uma função paga.
+  - Se você tiver uma versão antiga (9 ou anterior), é possível fazer isso de graça.
 
-  - Open CMD/PowerShell with Administrator rights
+- Uma vez que as operações tenham terminado:
 
-  - Run `diskpart`
+  - Abra o CMD/PowerShell com permissões de administrador.
 
-  - Run the following commands:
+  - Execute o `diskpart`.
 
-    - `list disk` 
+  - Execute os seguintes comandos:
 
-      - Will show your disks, check the destination disk carefully
-      - You can check Disk Manager as the disk numbering is the same
+    - `list disk`
+
+      - Exibirá suas unidades. Procure pela unidade de destino com cuidado.
+      - É possível verificar o número da unidade no Gerenciador de Discos, já que a numeração é a mesma.
 
     - `sel disk X`
 
-      - Where X is your destination disk number
-
-    - `list part` 
-
-      - Will list partitions on that selected disk
-      - Check the partitions as it may help you check for the destination
-      - If it's not the desired disk, use `sel disk X` again and choose another one and check again
-
-    - `create partition efi`
-
-      - Will create a new partition of EFI type
-      - This will make it hidden on the system and can only be explored with administrator privileges
-      - It will take up the whole free space we made earlier
+      - Onde X é o número da unidade de destino.
 
     - `list part`
 
-      - You'll see a new partition with Type `System`
-      - The size should roughly match the one we left earlier
+      - Exibirá as partições contidas na unidade selecionada.
+      - Verifique as partições, já que isso pode ajudar a encontrar o destino.
+      - Caso não seja a unidade desejada, use `sel disk X` novamente e selecione outra unidade.
+
+    - `create partition efi`
+
+      - Criará uma nova partição do tipo EFI.
+      - Isso a esconderá no sistema e ela só poderá ser navegada com privilégios de administrador.
+      - Ocupará todo o espaço liberado anteriormente.
+
+    - `list part`
+
+      - Você verá uma nova partição do tipo `System`.
+      - O tamanho deve ser mais ou menos o que foi configurado anteriormente.
 
     - `format fs=fat32 label="EFI"`
 
-      - this will format that partition as FAT32 and give it the label "EFI"
-      - Note: **in some cases** windows will return an error that `The device is not ready`, I'm not sure what could that be but we can fix it
-      - Fix of Note:
-        - Go back to MPW
-        - Right click on the EFI partition (should be also detected as `EFI System Partition`) and select **Format**
-        - ![Screenshot 2020-09-16 002834](../images/ex-data/FormatEFI.png)
-        - Press OK and be done with it.
+      - Isso formatará a partição em FAT32 e a nomeará como "EFI".
+      - Observação: **em alguns casos** o Windows retornará um erro dizendo que `O dispositivo não está pronto`. Não sei ao certo que pode ser, mas dá para corrgir:
+      - Correção:
+        - Volte no MPW.
+        - Clique com o botão direito na partição EFI (deve também ser detectada como `EFI System Partition`) e selecione **Formatar**
+        - ![trojan horse](../images/ex-data/FormatEFI.png)
+        - Aperte OK.
 
-    - Example of the output:
+    - Exemplo do resultado:
 
-      ![Screenshot 2020-09-16 002720](../images/ex-data/diskpart_output.png)
+      ![ameaça](../images/ex-data/diskpart_output.png)
 
-- Once done you can go to **Partitioning for macOS**
+- Assim que terminar, veja a seção **Particionando para o macOS**.
 
-#### In Linux (my favourite)
+#### No Linux (meu favorito)
 
-We'll be using your favorite tool Gparted, if you're using parted/gpart, you're looking for a sad day. Let's get going.
+Será preciso usar o GParted. Caso esteja usando o `parted` ou o `gpart`, se prepare para um dia triste. Vamos continuar.
 
-- Install `gparted` following your distribution instructions (or use GParted ISO)
+- Instale o `gparted` seguindo as intruções específicas da distribuição que você usa (ou use a ISO do GParted).
 
-- Run `gparted`
+- Execute o `gparted`
 
-- Select the destination disk from the list on the right
+- Selecione a unidade de destino na lista à direita:
 
-  ![image-20200917014041409](../images/ex-data/gparted_list_disk.png)
+  ![Seleção de Unidades no GParted](../images/ex-data/gparted_list_disk.png)
 
-- Right click on the first partition then select **Resize/Move**
+- Clique com o botão direito na primeira partição e então selecione **Redimensionar/mover**
 
-  ![image-20200917014201474](../images/ex-data/resize_gparted.png)
+  ![Opção Redimensionar-Mover](../images/ex-data/resize_gparted.png)
 
-- Select the Free space preceding text zone and press **up arrow key** until you get to the desired size then hit Resize/Move
+- Selecione o espaço livre que precede a zona de texto e pressione **seta para cima** no teclado até alcançar o tamanho desejado e clique em Redimensionar/Mover.
 
-  ![image-20200917014513781](../images/ex-data/resize_menu_gp.png)
+  ![Menu de Redimensionamento](../images/ex-data/resize_menu_gp.png)
 
-  - Note that if you went over the desired size then subtracted the extra amount, it **will be moved to the free space following** the partition, in this case just press `+` on the New size area until the space following zeros out, going for even more will decrease the free space preceding (logic, right? just don't mess up too much, thanks)
+  - Observe que, caso tenha passado do tamanho desejado, a quantidade restante **será movida para o espaço livre posterior** à partição. Nesses casos, apenas clique no `+` na área de Novo tamanho até que o espaço após a partição seja zerado. Alterar mais do que isso fará com que o espaço antes da partição seja diminuido (lógico, né? só não bagunçe muito, obrigado).
 
 - You'll get this error, press OK, this matters if you have multiple partitions but usually most modern OSes (on UEFI) are quite resilient to this issue (by using UUIDs instead of partition numbering)
 
