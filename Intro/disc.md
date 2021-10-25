@@ -1,5 +1,5 @@
-# Disclaimer
+# Aviso
 
-We are not responsible for bricked devices, dead hard drives, thermonuclear war, or you getting fired because you got a kernel panic and didn't save your work. You are responsible for reading everything carefully before you do anything. Do your research and ask for support if you have any questions or issues before trying random things on the internet because "it's the internet". If you do, YOU are choosing to follow random things on the internet, and if YOU point the finger at us for messing up your device, WE will laugh at you.
+Não somos responsáveis por dispositivos *brickados*, discos rígidos mortos, guerra termonuclear, ou sua demissão por ter tido um *kernel panic* e perdido seu trabalho. Você é o único responsável por ler tudo com bastante cuidado antes de tentar qualquer coisa. Faça suas pesquisas e peça ajuda caso tenha questionamentos ou problemas antes de tentar coisas aleatórias que você viu na internet simplesmente porque "se está na internet é verdade". Caso você faça isso, VOCÊ e somente você está escolhendo, por conta própria, seguir coisas aleatórias na internet. Se VOCÊ apontar o dedo para nós por estragar seu computador, NÓS riremos de você.
 
-So please backup your data and have a plan B in case things break (unlikely, but it happens more than you know).
+Então, por favor, faça um backup dos seus dados e tenha um plano B caso as coisas quebrem (pouco provável, mas acontece mais vezes do que você imagina).
