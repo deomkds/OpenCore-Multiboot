@@ -377,39 +377,36 @@ Será preciso usar o GParted. Caso esteja usando o `parted` ou o `gpart`, se pre
 
   ![Menu de Redimensionamento](../images/ex-data/resize_menu_gp.png)
 
-  - Observe que, caso tenha passado do tamanho desejado, a quantidade restante **será movida para o espaço livre posterior** à partição. Nesses casos, apenas clique no `+` na área de Novo tamanho até que o espaço após a partição seja zerado. Alterar mais do que isso fará com que o espaço antes da partição seja diminuido (lógico, né? só não bagunçe muito, obrigado).
+  - Observe que, caso tenha passado do tamanho desejado, a quantidade restante **será movida para o espaço livre posterior** à partição. Nesses casos, apenas clique no `+` na área de Novo tamanho até que o espaço após a partição seja zerado. Alterar mais do que isso fará com que o espaço antes da partição seja diminuido (lógico, né? só não bagunce muito, obrigado).
 
-- You'll get this error, press OK, this matters if you have multiple partitions but usually most modern OSes (on UEFI) are quite resilient to this issue (by using UUIDs instead of partition numbering)
+- Você verá estnotão direito na partição não alocada e selecione a opção Novo.
+  ![Opção Novo](../images/ex-data/new_part_gp.png)
 
-  ![image-20200917014846172](../images/ex-data/gp_warning.png)
+- Na caixa *Criar Nova Partição*, configure as seguintes opções e clique em Adicionar.
 
-- Right click on the unallocated partition and select New
-  ![image-20200917015144211](../images/ex-data/new_part_gp.png)
+  - Nome da Partição (pode se chamar EFI, mas não é obrigatório).
+  - Rótulo (pode se chamar EFI, mas não é obrigatório).
+  - Sistema de Arquivos: **FAT32**
+  - ![Criar Nova Partição](../images/ex-data/new_part_efi_gp.png)
 
-- In the *Create new Partition* box, set the following then press Add
+- Clique no corretinho verde que fica na barra de ferramentas para aplicar as alterações e confirmá-las.
+  ![Aplicar Mudanças](../images/ex-data/apply_changes_gp.png)
+  ![Caixa de Confirmação](../images/ex-data/confirm_apply.png)
 
-  - Partition name (could be named EFI, it doesn't matter)
-  - Label (could be named EFI, it doesn't matter)
-  - File system: **FAT32**
-  - ![image-20200917015338264](../images/ex-data/new_part_efi_gp.png)
+- **ESSE PROCESSO PODE DEMORAR DEPENDENDO DA QUANTIDADE DE DADOS QUE EXISTE NA UNIDADE E SE ELA É UM SSD OU UM DISCO ROTATIVO (HD). NÃO CANCELE EM HIPÓTESE ALGUMA, CASO CONTRÁRIO VOCÊ DESTRUIRÁ TODOS OS SEUS DADOS PARA SEMPRE. VOCÊ FOI AVISADO!**
 
-- Press the green check mark on the toolbar to Apply Changes and confirm them
-  ![Screen Shot 2020-09-17 at 01.54.56](../images/ex-data/apply_changes_gp.png)
-  ![image-20200917015813671](../images/ex-data/confirm_apply.png)
+  ![Aplicando Operações Pendentes](../images/ex-data/gp_progress.png)
 
-- **THIS PROCESS WILL TAKE TIME DEPENDING ON THE DATA ON YOUR DRIVE AND IF IT'S AN SSD OR A SPINNING RUST (HDD), DO NOT CANCEL IT UNDER ANY CIRCUMSTANCES OTHERWISE YOU'LL KILL YOUR DATA BYE BYE. YOU'VE BEEN WARNED!**
-  ![image-20200917020004696](../images/ex-data/gp_progress.png)
+- Assim que terminar, clique com o botão direito na sua partição EFI recém criada e selecione a opção "Gerenciar sinalizadores".
+  ![Gerenciar sinalizadores](../images/ex-data/mng_flags.png)
 
-- Once done, right click on your newly created EFI partition and select "Manage Flags"
-  ![image-20200917020200810](../images/ex-data/mng_flags.png)
+- Selecione `esp` e o gparted selecionará `boot` automaticamente. Mantenha dessa forma.
 
-- Select `esp`, gparted will select `boot` automatically, keep it that way
+  ![Sinalizadores](../images/ex-data/flags.png)
 
-  ![image-20200917020305683](../images/ex-data/flags.png)
+- Será aplicado instantaneamente. Verifique os sinalizadores:
+  ![Verificando sinalizadores](../images/ex-data/flags_check.png)
 
-- It will be done instantly, check your flags
-  ![image-20200917020438739](../images/ex-data/flags_check.png)
+  - Também é possivel checar pelo `gdisk`, procurando por `EF00`.
 
-  - You can also check in `gdisk` for `EF00`
-
-- Once done you can go to **Partitioning for macOS**
+- Terminado, prossiga para **Particionando para o macOS**.
