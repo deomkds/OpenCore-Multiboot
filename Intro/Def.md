@@ -1,23 +1,22 @@
-# What is multibooting?
+# O que é multiboot?
 
-Multibooting is the process of having multiple OSes booting off the same device and physically present on that device. You might say "well duh!" but some people do not know that you can only boot **one OS** at a time. Contrary to virtualisation, multibooting does *NOT* load all OSes at the same time but you turn off one to get to the other. Multibooting can be on any machine, whether it's a virtual one or a real one, as long as the firmware is able to boot either of the OSes, it's good.
+Multiboot é a presença de múltiplos sistemas operacionais capazes de serem inicializados a prtir do mesmo dispositivo e presentes fisicamente nesse dispositivo. Você pode até dizer "claro, duh!", mas algumas pessoas não sabem que só é possível inicializar apenas **um SO** por vez. Ao contrário do que acontece na virtualização, multiboot *NÃO* carrega todos os sistemas operacionais ao mesmo tempo. Em vez disso, é preciso desligar um sistema antes de iniciar o outro. O multiboot pode ser feito em qualquer computador, seja real ou virtual, desde que o firmware seja capaz de iniciar todos os sistemas operacionais.
 
-Here is how we can see Multiboot vs Virtualisation:
+Aqui está uma forma de visualizar a diferença entre multiboot e virtualização:
 
-![Left Multibooting  |  Right Virtualisation](../images/mbvm.png)
+![Multiboot à esquerda.  |  Virtualização à direita.](../images/mbvm.png)
 
-Now that you made the difference, there are thing you need to know about dualbooting, mainly:
+Agora que você entendeu a diferença, existe algumas coisas que é preciso saber em relação ao multiboot. Principalmente:
 
-- Disk partitioning
-- Bootloader location
-  - Legacy
+- Particionamento de Unidades
+- Localização do *Bootloader*
+  - Antigo
   - UEFI
-- Bootloader selection
-  - Legacy
+- Seleção de *Bootloader*
+  - Antigo
   - UEFI
-- Configuration of the bootloader
+- Configuração do *Bootloader*
 
-But before starting any of this
+Mas, antes de fazer qualquer coisa
 
-# PLEASE BACKUP YOUR DATA.
-
+# FAÇA BACKUP DOS SEUS DADOS.
