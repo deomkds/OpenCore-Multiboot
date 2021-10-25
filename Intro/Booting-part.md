@@ -1,19 +1,19 @@
-# UEFI Systems
+# Sistemas UEFI
 
-Ever since UEFI, the disk default partition map format is GPT (GUID Partition Table), which added support for more than 2TB of disk size and more than 4 partitions that was the limit of MBR while still keeping a backward compatibility with MBR for legacy systems. If your computer (prebuilt) came with Windows 8 (2012 and later), then your disk is probably partitioned as GPT.
+Desde a criação da UEFI, o formato padrão de mapa de partições para as unidades é o GPT (*GUID Partition Table*), que adicionou suporte a unidades com mais de 2TB de tamanho e mais de 4 partições, que eram limitações do MBR, ao mesmo tempo em que mantém a retrocompatibilidade com o MBR para computadores antigos. Se o seu computador (pré-montado) veio com Windows 8 (2012 ou posterior), então a sua unidade muito provavelmente estará particionada em GPT.
 
-Usually, 2012+ computers that came with Windows 8 would have a UEFI firmware (some OEMs released Windows 7 releases alongside those, so make sure yours has UEFI), and this is a newly spread firmware type (that was in development since the 2000s) and was already deployed on Apple computers ever since the intel switch (but their own heavily modified firmware, it's called EFI and not UEFI for the lack of universality). This new firmware has some new features like Secure Boot, help with faster booting, hardware passthrough, graphical interface with mouse support (and more). To know more about UEFI and Secure Boot check this writeup by Osy86 [here](https://osy.gitbook.io/hac-mini-guide/details/secure-boot). Basically, a UEFI boot goes something like this:
+Geralmente, computadores de 2012 em diante que vieram com o Windows 8 tem firmware UEFI (algumas OEMS lançaram computadores com Windows 7 no mesmo período, então certifique-se de que o seu possui firmware UEFI). UEFI é um tipo de firmware distribuído recentemente (que esteve em desenvolvimento desde os anos 2000) e já estava presente em computadores Apple desde a transição para processadores Intel (mas em uma versão altamente modificada do firmware, que é chamada de EFI e não UEFI por faltar universalidade). Esse novo firmware possui alguns novos recursos como a Inicialização Segura, ajuda com inicializações mais rápidas, acesso direto a hardwares, interface gráfica com suporte a mouse, entre outras coisas. Para saber mais sobre UEFI e Inicialização Segura, leia este artigo escrito por Osy86 [aqui](https://osy.gitbook.io/hac-mini-guide/details/secure-boot) (em inglês). Basicamente, uma inicialização UEFI acontece da seguinte forma:
 
-- UEFI Firmware loads up
-- Loads its integrated drivers and services
-- Reads the boot menu entries and start loading the first boot entry
-  - If failed starts the next one
-- Loads the bootloader 
-  - OS is loaded after that.
+- O firmware UEFI é carregado.
+- Carrega seus drivers e serviços integrados.
+- Lê as entradas do menu de inicialização e começa a carregar a primeira entrada.
+  - Se falhar, inicia a próxima.
+- Inicia o *bootloader*.
+  - O sistema operacional é carregado depois disso.
 
-Usually, the said "bootloader" is contained somewhere in the disk, and that somewhere is called a **EFI Partition**. You can find this named different things like ESP (EFI System Partition), SYSTEM, EFI, BOOT and so on. This partition is **FAT32** formatted and flagged as **EF00** in MBR or **C12A7328-F81F-11D2-BA4B-00A0C93EC93B** GUID in GPT. This partition contains usually the EFI applications (like an OS bootloader) in it that are loaded at boot by the UEFI firmware (remember this as it is important for later for recovery).
+Geralmente, o dito *bootloader* fica contido em algum lugar na unidade, e esse "algum lugar, é chamado de **partição EFI**. Você encontra essa partição sob diferentesnomes, como ESP (*EFI System Partition*), SYSTEM, EFI, BOOT, entre outros. É uma partição formatada em **FAT32** e sinalizada como **EF00** na MBR ou com o GUID **C12A7328-F81F-11D2-BA4B-00A0C93EC93B** na GPT. Esta partição geralmente contém os aplicativos EFI (como um *bootloader* de algum SO) que são carregados no momento da inicialização pelo firmware UEFI (lembre-se disso pois é importante depois para recuperação).
 
-# Legacy/CSM Systems
+# Sistemas Antigos/CSM (Legados)
 
 Contrary to UEFI, Legacy systems are older and much more mature (dating back to the first IBM PCs). They're certainly a lot more limited and slower than UEFI on the same system but hold better compatibility with a lot of OSes (even macOS in some rare cases). Computer pre-2012 usually have this type of firmware (some exceptions like servers and some professional laptops and so on that can also have UEFI, they're not reliable thought in that mode). The computer would usually come with a version of Windows that is older than Windows 8 with a hard drive that is less than 2TB. Some desktop users at this time would also install OSes in Legacy mode even if their motherboard supports the newer UEFI standard. This could create issues with multibooting later on.
 
