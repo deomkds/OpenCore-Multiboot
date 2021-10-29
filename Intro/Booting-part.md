@@ -1,4 +1,4 @@
-# Sistemas UEFI
+# Computadores UEFI
 
 Desde a criação da UEFI, o formato padrão de mapa de partições para as unidades é o GPT (*GUID Partition Table*), que adicionou suporte a unidades com mais de 2TB de tamanho e mais de 4 partições, que eram limitações do MBR, ao mesmo tempo em que mantém a retrocompatibilidade com o MBR para computadores antigos. Se o seu computador (pré-montado) veio com Windows 8 (2012 ou posterior), então a sua unidade muito provavelmente estará particionada em GPT.
 
@@ -13,18 +13,18 @@ Geralmente, computadores de 2012 em diante que vieram com o Windows 8 tem firmwa
 
 Geralmente, o dito *bootloader* fica contido em algum lugar na unidade, e esse "algum lugar, é chamado de **partição EFI**. Você encontra essa partição sob diferentesnomes, como ESP (*EFI System Partition*), SYSTEM, EFI, BOOT, entre outros. É uma partição formatada em **FAT32** e sinalizada como **EF00** na MBR ou com o GUID **C12A7328-F81F-11D2-BA4B-00A0C93EC93B** na GPT. Esta partição geralmente contém os aplicativos EFI (como um *bootloader* de algum SO) que são carregados no momento da inicialização pelo firmware UEFI (lembre-se disso pois é importante depois para recuperação).
 
-# Sistemas Antigos/CSM (Legados)
+# Computadores Antigos/CSM (Legados)
 
-Contrary to UEFI, Legacy systems are older and much more mature (dating back to the first IBM PCs). They're certainly a lot more limited and slower than UEFI on the same system but hold better compatibility with a lot of OSes (even macOS in some rare cases). Computer pre-2012 usually have this type of firmware (some exceptions like servers and some professional laptops and so on that can also have UEFI, they're not reliable thought in that mode). The computer would usually come with a version of Windows that is older than Windows 8 with a hard drive that is less than 2TB. Some desktop users at this time would also install OSes in Legacy mode even if their motherboard supports the newer UEFI standard. This could create issues with multibooting later on.
+Ao contrário de computadores com UEFI, computadores legados são mais antigos e muito mais maduros (datam desde os primeiros PCs da IBM). São certamente muito mais limitados e mais lentos do que UEFI no mesmo computador, mas possuem melhor compatibilidade com muitos sistemas operacionais (até mesmo o macOS em alguns casos raros). Computadores anteriores a 2012 geralmente possuem esse tipo de firmware (existem algumas exceções, como servidores e alguns notebooks profissionais, que podem ter UEFI também, mas não costumam ser estáveis nesse modo). O computador que geralmente vinha com uma versão do Windows mais antiga que o Windows 8 e com um disco rígido menor que 2TB. Alguns usuários de desktops nessa época ainda instalavam sistemas operacionais no modo legado mesmo quando suas placas-mãe suportavam o padrão UEFI mais novo. Isso pode criar problemas com o multiboot mais tarde.
 
-These systems rely on another method of loading the bootloader. This piece of software is usually written in the first sectors of the disk (formatted as MBR) called **boot sector**, this sector is usually 512 or 4096 bytes big, the BIOS would then read the code, copy it to memory and then execute it, at that point an OS or Bootloader menu (like GRUB2) will show up:
+Esses computadores dependem de um outro método para carregar o *bootloader*. Esse software é geralmente gravado nos primeiros setores da unidade (formatada em MBR) chamado de **boot sector**. Esse setor geralmente tinha de 512 a 4096 bytes de tamanho. A BIOS lia o código, copiava-o para a memória e então o executava. Nesse momento, um sistema operacional ou um menu de *bootloader* (como o GRUB2) apareceria:
 
-* BIOS Starts up
-* Reads the **boot sector**
-* Loads the program into memory
-* Executes the program
-* Bootloader appears
-  * The OS will boot now.
+* BIOS inicia.
+* Lê o **boot sector**.
+* Carrega o programa na memória.
+* Executa o programa.
+* *Bootloader* aparece.
+  * O sistema operacional é iniciado.
 
 # Major differences between the systems
 
