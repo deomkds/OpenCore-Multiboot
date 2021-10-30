@@ -1,142 +1,142 @@
-# Installing and using BootCamp utilities
+# Instalando e Utilizando os Utilitários do BootCamp
 
-<extoc></extoc>
+[[toc]]
 
-So a neat feature of OpenCore is the ability to avoid the BIOS entirely and use the Startup disk solely for multiboot. The problem comes in when we try to boot windows and have no way of setting the boot option back to macOS. That's where the BootCamp utilities come in.
+Uma função interessante do OpenCore é a habilidade de contornar completamente a BIOS e usar o painel de preferências Disco de Inicialização para trocar entre sistemas operacionais. O problema acontece quando tentamos inicar o Windows e não temos nenhuma maneira de configurar a opção de inicialização de volta para o macOS. É aí que os Utilitários do BootCamp entram.
 
-* Note: This guide will not cover the creation of the Windows installer, only the installation of BootCamp drivers.
-  * Example of Windows installer creation: [Build a Bootable Windows ISO](https://www.freecodecamp.org/news/how-make-a-windows-10-usb-using-your-mac-build-a-bootable-iso-from-your-macs-terminal/)
-  * Reminder: Windows **MUST** be GPT/GUID based, OpenCore will not boot legacy installs
-* Note 2: Using BootCamp utilities from macOS will erase the EFI/BOOT/BOOTx64.efi file on your EFI, which is needed for booting OpenCore. And OpenCore itself does not support MBR based installs so the utility is useless to us
+* Observação: este guia não cobrirá a criação do instalador do Windows, apenas a instalação dos drivers do BootCamp.
+  * Exemplo da criação de um instalador do Windows: [Build a Bootable Windows ISO](https://www.freecodecamp.org/news/how-make-a-windows-10-usb-using-your-mac-build-a-bootable-iso-from-your-macs-terminal/) (em inglês).
+  * Lembrete: o Windows **PRECISA** ser baseado em GPT/GUID. O OpenCore não iniciará instalações herdadas.
+* Observação 2: usar o Utilitário de BootCamp no macOS apagará o arquivo `EFI/BOOT/BOOTx64.efi` da partição EFI, mas ele é necessário para iniciar o OpenCore. E o OpenCore não suporta instalações em MBR então o utilitário é inútil para nós.
 
-## Preparations
+## Preparações
 
-To start we'll need the following:
+Para começar, precisaremos do seguinte:
 
-* Windows already installed
-  * MUST be UEFI/GPT based
+* Windows já instalado.
+  * PRECISA ser em UEFI/GPT.
 * [Brigadier](https://github.com/corpnewt/brigadier)
-  * To download the BootCamp drivers
-* SMBIOS injection enabled
-  * As the drivers have a SMBIOS check
-* Setup [Bootstrap.efi](/post-install/multiboot/bootstrap.md)
-  * Not required but can help alleviate headaches when Windows erases the BOOTx64.efi OpenCore uses
+  * Para baixar os drivers do BootCamp.
+* Injeção de SMBIOS habilitada.
+  * Já que os drivers possuem verificação de SMBIOS.
+* Configure [Bootstrap.efi](/post-install/multiboot/bootstrap.md)
+  * É opcional, mas pode ajudar a aliviar dores de cabeça quando o Windows apaga o `BOOTx64.efi` que o OpenCore usa.
 
-## Installation
+## Instalação
 
-To install, it's as simple as grabbing [Brigadier](https://github.com/corpnewt/brigadier) and running either `Brigadier.bat` for Windows or `Brigadier.command` for macOS. If the SMBIOS you're currently using either has BootCamp issues or want to download for another SMBIOS, you can add `--  model{SMBIOS}` to the end:
+Para instalar, basta baixar o [Brigadier](https://github.com/corpnewt/brigadier) e executar o `Brigadier.bat` para Windows ou o `Brigadier.command` para macOS. Se a SMBIOS usada no momento tiver problemas com o BootCamp ou você quiser baixar arquivos para outra SMBIOS, basta adicionar o argumento `--model {SMBIOS}` no final:
 
 ```
-cd path/to/Brigadier
+cd /caminho/do/Brigadier
 brigadier.bat --model MacPro7,1
 ```
 
-* **Note**: Older versions of the BootCamp installer(6.0) do not support APFS, you'll need to either choose a newer SMBIOS that would have it bundled (ie. iMac 19,1 or MacPro7,1) or after installation update your bootcamp software. See below for more details on troubleshooting: [Windows Startup Disk can't see APFS drives](#windows-startup-disk-cant-see-apfs-drives)
+* **Observação**: versões antigas do Instalador do BootCamp (6.0) não suportam APFS. Será necessário escolher uma nova SMBIOS que o teria integrado (como iMac 19,1 ou MacPro7,1) ou, após a instalação, atualizar seu software de BootCamp. Veja abaixo para obter mais detalhes sobre solução de problemas: [O Instalador do Windows Não Enxerga Unidades em APFS](#o-instalador-do-windows-não-enxerga-unidades-em-apfs).
 
-![](../images/bootcamp-md/extension.png)
+![Exemplo de uso do comando no Brigadier.](../images/bootcamp-md/extension.png)
 
-Next, you will find our bootcamp drivers under either:
+Depois, você encontrará os drivers do BootCamp na pasta:
 
 * Windows:
 
 ```
-path\to\Brigadier\BootCamp-{version}
+caminho\do\Brigadier\BootCamp-{versões}
 ```
 
 * macOS:
 
 ```
-path/to/Brigadier/BootCamp-{version}/WindowsSupport.dmg
+caminho/do/Brigadier/BootCamp-{versões}/WindowsSupport.dmg
 ```
 
-macOS users will next need to expand WindowsSupport.dmg and place it somewhere Windows can get.
+Usuários de macOS precisarão, então, expandir o arquivo `WindowsSupport.dmg` e colocá-lo em algum lugar que o Windows possa acessar.
 
 ![](../images/bootcamp-md/done.png)
 
-Next navigate to the `bootcamp-{version}\BootCamp` folder and run the Setup.exe:
+Então navegue até a pasta `bootcamp-{versão}\BootCamp` e execute o `Setup.exe`:
 
 ![](../images/bootcamp-md/location.png)
 
-Once all is finished, you now have BootCamp switching! There should be a little BootCamp icon in your tray now that you can select which drive to boot to.
+Uma vez que tudo tiver terminado, você terá a troca pelo BootCamp. Deverá haver um pequeno ícone do BootCamp na barra do relógio que permite selecionar qual unidade iniciar.
 
-* Note: For those no needing the extra drivers BootCamp provides, you can delete the following:
-  * `$WinPEDriver$`: **DO NOT** delete the folder itself, just the drivers inside
-    * Apple Wifi card users will want to keep the following:
+* Observações: para aqueles que não precisam dos drivers que o BootCamp fornece, é possível excluir o seguinte:
+  * `$WinPEDriver$`: **NÃO APAGUE** a pasta em si, apenas os drivers que ela contém.
+    * Usuários de placas Wi-Fi da Apple (ou Fenvi) desejarão manter o seguinte:
       * `$WinPEDriver$/BroadcomWireless`
       * `$WinPEDriver$/BroadcomBluetooth`
       * `$WinPEDriver$/AppleBluetoothBroadcom`
   * `BootCamp/Drivers/...`
-    * **DO NOT** delete `BootCamp/Drivers/Apple`
-    * Apple Wifi card users will want to keep the following:
+    * **NÃO APAGUE** a pasta `BootCamp/Drivers/Apple`.
+    * Usuários de placas Wi-Fi da Apple (ou Fenvi) desejarão manter o seguinte:
       * `BootCamp/Drivers/Broadcom/BroadcomBluetooth`
 
-## Troubleshooting
+## Solução de Problemas
 
-* [Can't find Windows/BootCamp drive in picker](#cant-find-windowsbootcamp-drive-in-picker)
-* ["You can't change the startup disk to the selected disk" error](#you-cant-change-the-startup-disk-to-the-selected-disk-error)
-* [Booting Windows results in BlueScreen or Linux crashes](#booting-windows-results-in-bluescreen-or-linux-crashes)
-* [Booting Windows error: `OCB: StartImage failed - Already started`](#booting-windows-error-ocb-startimage-failed---already-started)
-* [Windows Startup Disk can't see APFS drives](#windows-startup-disk-cant-see-apfs-drives)
+* [Impossível Encontrar a Unidade do Windows/BootCamp no Seletor](#impossível-encontrar-a-unidade-do-windowsbootcamp-no-seletor)
+* [Erro "Você não pode alterar o disco de inicialização para o disco selecionado"](#erro-você-não-pode-alterar-o-disco-de-inicialização-para-o-disco-selecionado)
+* [Iniciar o Windows Resulta em Tela Azul ou o Linux Trava](#iniciar-o-windows-resulta-em-tela-azul-ou-o-linux-trava)
+* [Erro ao Iniciar o Windows: `OCB: StartImage failed - Already started`](#erro-ao-iniciar-o-windows-ocb-startimage-failed---already-started)
+* [O Instalador do Windows Não Enxerga Unidades em APFS](#o-instalador-do-windows-não-enxerga-unidades-em-apfs)
 
-## Can't find Windows/BootCamp drive in picker
+## Impossível Encontrar a Unidade do Windows/BootCamp no Seletor
 
-So with OpenCore, we have to note that legacy Windows installs are not supported, only UEFI. Most installs now are UEFI based but those made by BootCamp Assistant in macOS are legacy based, so you'll have to find other means to make an installer(Google's your friend). This also means MasterBootRecord/Hybrid partitions are also broken so you'll need to format the drive you want to install onto with DiskUtility.
+É preciso lembrar que instalações herdadas do Windows (MBR, não UEFI) não são suportadas no OpenCore. A maioria das instalações hoje em dia são baseadas em UEFI, no entanto aquelas feitas com o Assistente de BootCamp pelo macOS não são UEFI, então será necessário encontrar outras maneiras de criar um instalador (o Google é seu amigo). Isso também significa que partições MBR ou híbridas também estarão quebradas e será necessário formatar a unidade de destino com o Utilitário de Disco.
 
-Now to get onto troubleshooting:
+Agora, vamos à solução de problemas:
 
-* Make sure `Misc -> Security -> ScanPolicy` is set to `0` to show all drives
+* Certifique-se de que a opção `Misc -> Security -> ScanPolicy` está configurada para `0` de forma a exibir todas as unidades e partições.
 
-If Windows and OpenCore's boot loaders are on the same drive, you'll need to add a BlessOverride entry:
+Se os *bootloaders* do Windows e o OpenCore estiverem na mesma unidade, será necessário adicionar uma entrada `BlessOverride`:
 
 ```
 Misc -> BlessOverride -> \EFI\Microsoft\Boot\bootmgfw.efi
 ```
 
-* **Note**: As of OpenCore 0.5.9, this no longer needs to be specified. OpenCore should pick up on this entry automatically
+* **Observação**: a partir da versão 0.5.9 do OpenCore, isso não é mais necessário. O OpenCore deve encontrar essa entrada automaticamente.
 
 ![](../images/win-md/blessoverride.png)
 
-## "You can't change the startup disk to the selected disk" error
+## Erro "Você não pode alterar o disco de inicialização para o disco selecionado"
 
-This is commonly caused by either:
+Isso é comumente causado por:
 
-* 3rd Party NTFS Drivers (ie. Paragon)
-* Irregular partition setup of the Windows drive, specifically that the EFI is not the first partition.
-* You have BitLocker enabled
+* Drivers de NTFS de terceiros (tipo Paragon).
+* Configuração de partições irregular na unidade do Windows. Mais especificamente, significa que a partição EFI não é a primeira partição.
+* O BitLocker está habilitado.
 
-To fix the first, either disable or uninstall these tools.
+Para corrigir o primeiro, desabilite ou desinstale esses drivers.
 
-To fix the second, we need to enable this quirk:
+Para corrigir o segundo, é preciso habilitar esta *quirk*:
 
 * `PlatformInfo -> Generic -> AdviseWindows -> True`
 
 ![](../images/bootcamp-md/error.png)
 
-To fix the third, you will be required to lift Bitlocker encryption.
+Para corrigir o terceiro, será necessário abrir mão da criptografia do BitLocker.
 
-## Booting Windows results in BlueScreen or Linux crashes
+## Iniciar o Windows Resulta em Tela Azul ou o Linux Trava
 
-This is due to alignment issues, make sure `SyncRuntimePermissions` is enabled on firmwares supporting MATs. Check your logs whether your firmware supports Memory Attribute Tables(generally seen on 2018 firmwares and newer)
+Isso se deve a problemas de alinhamento. Certifique-se de que a opção `SyncRuntimePermissions` está habilitada nos firmwares que suportam MATs. Verifique nos logs se o firmware suporta Memory Attribute Tables (visto geralmente em firmwares de 2018 e mais novos).
 
-For Z390 and newer motherboards, you'll also want to enable `ProtectUefiServices` to ensure OpenCore's patches are applying correctly.
+Em placas-mãe Z390 e mais novas, também será necessário habilitar a opção `ProtectUefiServices` para garantir que os patches do OpenCore sejam aplicados corretamente.
 
-If your firmware is quite old(generally 2013 and older), you'll want to enable `ProtectMemoryRegions`.
+Se o firmware do seu computador for mais antigo (2013 ou mais velho), habilite a opção `ProtectMemoryRegions`.
 
-Due to the variations of firmwares from vendor to vendor, you'll need to play around with the combination of these 3 quirks and see which works best.
+Devido a variações de firmwares entre fabricantes, será necessário testar uma combinação dessas 3 *quirks* e ver qual funciona melhor.
 
-Common Windows error code:
+Código de Erro Comum do Windows:
 
 * `0xc000000d`
 
-## Booting Windows error: `OCB: StartImage failed - Already started`
+## Erro ao Iniciar o Windows: `OCB: StartImage failed - Already started`
 
-This is due to OpenCore getting confused when trying to boot Windows and accidentally thinking it's booting OpenCore. This can be avoided by either move Windows to its own drive *or* adding a custom drive path under BlessOverride. See [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf) and [Can't find Windows/BootCamp drive in picker](#cant-find-windowsbootcamp-drive-in-picker) entry for more details.
+Isso se deve ao OpenCore se confundir ao tentar iniciar o Windows e acidentalmente pensar que está iniciar o OpenCore. Isso pode ser evitado movendo o Windows para uma unidade separada *ou* adicionar um caminho de unidade personalizado na opção `BlessOverride`. Leia o [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf) (em inglês) e a seção [Impossível Encontrar a Unidade do Windows/BootCamp no Seletor](#impossível-encontrar-a-unidade-do-windowsbootcamp-no-seletor) para obter mais detalhes.
 
-## Windows Startup Disk can't see APFS drives
+## O Instalador do Windows Não Enxerga Unidades em APFS
 
-* Outdated BootCamp drivers(generally ver 6.0 will come with brigadier, BootCamp Utility in macOS provides newer version like ver 6.1). You can try to alleviate these issues by either updating to the newest release with Apple's software updater or selecting a newer SMBIOS from brigadier (ie. `--model iMac19,1`) and when running brigadier.
+* Drivers de BootCamp desatualizados (geralmente a versão 6.0 virá com o Brigadier, enquanto o Utilitário de BootCamp no macOS fornece versões mais novas, como a 6.1). Você pode tentar aliviar esses problemas atualizando para a versão mais recente usando o atualizador de softwares da Apple ou selecionando uma SMBIOS mais novas no Brigadier (use o argumento `--model iMac19,1`) e ao executar o Brigadier.
 
-For the latter, you'll need to run the following(replace `filename.msi` with the BootCamp installation msi):
+Para o último, será necessário executar o seguinte (substituia `filename.msi` pelo arquivo `.msi` de instalação do BootCamp):
 
 ```
 msiexec.exe /x "c:\filename.msi"
