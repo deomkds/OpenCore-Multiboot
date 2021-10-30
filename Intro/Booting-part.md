@@ -4,20 +4,20 @@ Desde a criação da UEFI, o formato padrão de mapa de partições para as unid
 
 Geralmente, computadores de 2012 em diante que vieram com o Windows 8 tem firmware UEFI (algumas OEMS lançaram computadores com Windows 7 no mesmo período, então certifique-se de que o seu possui firmware UEFI). UEFI é um tipo de firmware distribuído recentemente (que esteve em desenvolvimento desde os anos 2000) e já estava presente em computadores Apple desde a transição para processadores Intel (mas em uma versão altamente modificada do firmware, que é chamada de EFI e não UEFI por faltar universalidade). Esse novo firmware possui alguns novos recursos como a Inicialização Segura, ajuda com inicializações mais rápidas, acesso direto a hardwares, interface gráfica com suporte a mouse, entre outras coisas. Para saber mais sobre UEFI e Inicialização Segura, leia este artigo escrito por Osy86 [aqui](https://osy.gitbook.io/hac-mini-guide/details/secure-boot) (em inglês). Basicamente, uma inicialização UEFI acontece da seguinte forma:
 
-- O firmware UEFI é carregado.
-- Carrega seus drivers e serviços integrados.
-- Lê as entradas do menu de inicialização e começa a carregar a primeira entrada.
-  - Se falhar, inicia a próxima.
-- Inicia o *bootloader*.
-  - O sistema operacional é carregado depois disso.
+* O firmware UEFI é carregado.
+* Carrega seus drivers e serviços integrados.
+* Lê as entradas do menu de inicialização e começa a carregar a primeira entrada.
+  * Se falhar, inicia a próxima.
+* Inicia o *bootloader*.
+  * O sistema operacional é carregado depois disso.
 
 Geralmente, o dito *bootloader* fica contido em algum lugar na unidade, e esse "algum lugar, é chamado de **partição EFI**. Você encontra essa partição sob diferentesnomes, como ESP (*EFI System Partition*), SYSTEM, EFI, BOOT, entre outros. É uma partição formatada em **FAT32** e sinalizada como **EF00** na MBR ou com o GUID **C12A7328-F81F-11D2-BA4B-00A0C93EC93B** na GPT. Esta partição geralmente contém os aplicativos EFI (como um *bootloader* de algum SO) que são carregados no momento da inicialização pelo firmware UEFI (lembre-se disso pois é importante depois para recuperação).
 
-# Computadores Antigos/CSM (Legados)
+# Computadores Antigos/CSM (Herdados)
 
-Ao contrário de computadores com UEFI, computadores legados são mais antigos e muito mais maduros (datam desde os primeiros PCs da IBM). São certamente muito mais limitados e mais lentos do que UEFI no mesmo computador, mas possuem melhor compatibilidade com muitos sistemas operacionais (até mesmo o macOS em alguns casos raros). Computadores anteriores a 2012 geralmente possuem esse tipo de firmware (existem algumas exceções, como servidores e alguns notebooks profissionais, que podem ter UEFI também, mas não costumam ser estáveis nesse modo). O computador que geralmente vinha com uma versão do Windows mais antiga que o Windows 8 e com um disco rígido menor que 2TB. Alguns usuários de desktops nessa época ainda instalavam sistemas operacionais no modo legado mesmo quando suas placas-mãe suportavam o padrão UEFI mais novo. Isso pode criar problemas com o multiboot mais tarde.
+Ao contrário de computadores com UEFI, computadores com firmwares herdados são mais antigos e muito mais maduros (datam desde os primeiros PCs da IBM). São certamente muito mais limitados e mais lentos do que UEFI no mesmo computador, mas possuem melhor compatibilidade com muitos sistemas operacionais (até mesmo o macOS em alguns casos raros). Computadores anteriores a 2012 geralmente possuem esse tipo de firmware (existem algumas exceções, como servidores e alguns notebooks profissionais, que podem ter UEFI também, mas não costumam ser estáveis nesse modo). O computador que geralmente vinha com uma versão do Windows mais antiga que o Windows 8 e com um disco rígido menor que 2TB. Alguns usuários de desktops nessa época ainda instalavam sistemas operacionais no modo herdado mesmo quando suas placas-mãe suportavam o padrão UEFI mais novo. Isso pode criar problemas com o *multiboot* mais tarde.
 
-Esses computadores dependem de um outro método para carregar o *bootloader*. Esse software é geralmente gravado nos primeiros setores da unidade (formatada em MBR) chamado de **boot sector**. Esse setor geralmente tinha de 512 a 4096 bytes de tamanho. A BIOS lia o código, copiava-o para a memória e então o executava. Nesse momento, um sistema operacional ou um menu de *bootloader* (como o GRUB2) apareceria:
+Esses computadores dependem de um outro método para carregar o *bootloader*. Esse software é geralmente gravado nos primeiros setores da unidade (formatada em MBR) chamado de **boot sector**. Esse setor geralmente tem de 512 a 4096 bytes de tamanho. A BIOS lê o código, o copia para a memória e então o executa. Nesse momento, um sistema operacional ou um menu de *bootloader* (como o GRUB2) é exibido:
 
 * BIOS inicia.
 * Lê o **boot sector**.
@@ -26,90 +26,102 @@ Esses computadores dependem de um outro método para carregar o *bootloader*. Es
 * *Bootloader* aparece.
   * O sistema operacional é iniciado.
 
-# Major differences between the systems
+# Maiores Diferenças Entre Firmwares
 
-We'll put them in a table to show the main differences:
+Colocaremos as diferenças numa tabela para melhor exibi-las:
 
-|                                                            | **UEFI**                                                     | **Legacy**                                                   |
-| ---------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Fast Boot                                                  | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Bootloader Chooser through the boot menu                   | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Secure Boot                                                | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Add a bootloader without overwriting the others            | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| Supporting 2TB+ boot disks                                 | ✅ (hardware dependent)                                       | ❌ (requires GPT, which is supported on some Legacy systems, 2006+) |
-| Legacy Hardware Support                                    | ⚠️ (depends on which hardware, CSM switch should be possible) | ✅ (hardware dependent)                                       |
-| Easier maintenance (managing bootloaders and boot entries) | ✅ (on most)                                                  | ❌ (only some do, not a standard)                             |
-| OS Support                                                 | ✅                                                            | ✅                                                            |
+| Legenda |   |
+| ------- | - |
+| **Símbolo** | **Significado** |
+| ✅ | Presente na maioria dos firmwares. |
+| ❌ | Raro, não é um padrão. |
+| ⚠️ | Depende, varia entre fabricantes. |
 
-Aside from Legacy hardware support (which is rare anyways nowadays), UEFI is the firmware to use when dual booting on newer hardware (2012+). But for legacy users, there is also a way to get some UEFI features but only through DUET (will be later discussed).
+| Diferenças                                          |              |          |            |
+| -                                                   | -            | :-:      | :-:        |
+| **Nome**                                            | **Original** | **UEFI** | **Herdado** |
+| Inicialização Rápida                                | Fast Boot    | ✅       | ❌         |
+| Seletor de Inicialização                            | -            | ✅       | ❌         |
+| Inicialização Segura                                | Secure Boot  | ✅       | ❌         |
+| Adicionar *bootloader* sem sobrescrever outros      | -            | ✅       | ❌         |
+| Inicia unidades maiores que 2TB                     | -            | ✅       | ❌[^1]     |
+| Suporta Hardware Antigo                             | -            | ⚠️[^2]    | ✅[^3]     |
+| Manutenção Fácil (gerenciar bootloaders e entradas) | -            | ✅       | ❌         |
+| Suporte de Sistemas Operacionais                    | -            | ✅       | ✅         |
 
-# Detecting which firmware you're using
+[^1]: Exige GPT, suportado em alguns firmwares a partir de 2006.
+[^2]: Depende do hardware, mas o CSM deve ser possível.
+[^3]: Depende do hardware.
 
-## No OS
+Além do suporte a hardware antigo (os quais são raros hoje em dia), UEFI é o firmware a se usar ao fazer dual boot em computadores mais novos (2012 em diante). Mas, para usuários de firmwares herdados, existe uma maneira de obter algumas das funções da UEFI por meio do DUET (será discutido no futuro).
 
-If your computer:
+# Detectando o Tipo de Firmware do Computador
 
-- is from Ivy Bridge era (~2012) and later
-- has a Windows 8 Sticker
+## Sem Sistema Operacional
 
-Then it probably has **UEFI system**, that said, it doesn't mean older generation motherboards do not, however with Windows 8 release, Microsoft standardized the UEFI specs for OEMs to get their certification (usually if you go with brand names like ASUS, Lenovo, HP, Dell... you're good to go).
+Se o seu computador:
 
-Any older than the above and the chances of having a proper UEFI implementation diminishes and you're better off with a Legacy booting.
+* é da época do Ivy Bridge (por volta de 2012) ou posterior
+* possui um adesivo do Windows 8
 
-## On Windows
+então provavelmente é um computador UEFI. Tendo dito isso, não significa que placas-mãe de gerações mais antigas não suportem. No entanto, com o lançamento do Windows 8, a Microsoft padronizou as especificações de UEFI de forma que as OEMs pudessem conseguir a certificação (geralmente, se o computador for da Asus, Lenovo, HP, Dell, entre outros, estará tudo certo).
 
-Open Run (Win + R) and type `msinfo32`, you will be greeted with this window:
+Mais antigo do que o exposto acima, as chances de ter uma implementação UEFI diminui e é melhor partir para a inicialização legada.
 
-![MSINFO32 Window](../images/msinfo.png)
+## Pelo Windows
 
-Check **BIOS Mode**, it will either say **UEFI** or **Legacy**. Note that this is for Windows 8/10, if you're using Windows 7 or older, you're probably running it in Legacy mode.
+Pressione `Win + R` para abrir a janela `Executar` e digite `msinfo32`. Essa janela será exibida:
 
-## On Linux
+![Janela do MSINFO32](../images/msinfo.png)
 
-### Method 1
+Verifique o **Modo da BIOS**. Poderá dizer **UEFI** ou **Herdado**. Observe que isso se aplica somente ao Windows 8/10. Caso esteja utilizando o Windows 7 ou anterior, é provável que esteja executando no modo Herdado (ou Herdado, como o Windows prefere chamar).
 
-On most Linux distributions, you can run 
+## Pelo Linux
+
+### Método 1
+
+Na maioria das distribuições Linux, é possível executar o seguinte comando:
 
 ```ls /sys/firmware/efi```
 
-![img](../images/linuxefivar.png)
+![Créditos a Scooby-Chan#7971 pela imagem.](../images/linuxefivar.png)
 
-If the folder exists, then you're running in UEFI mode. (screenshot credit: Scooby-Chan#7971)
+Se a pasta existir, então o sistema está sendo executado no modo UEFI.
 
-### Method 2
+### Método 2
 
-You can also download and run `efibootmgr` (available on most distributions) and you will either:
+Você também pode baixar, executar o `efibootmgr` (disponível na maioria das distribuições) e observar o resultado:
 
-- Get boot entries variables
-  - Your system is running UEFI
-- or get an error message that EFI variables aren't supported
-  - Your system is running in Legacy mode
-
----
-
-# macOS in all of this
-
-macOS requires some special treatment because Apple wants to (pampering their OS), and thus requires a set of rules to get it installed on any drive:
-
-- GPT formatted disk
-- EFI partition of at least 200MB
-
-With these two requirements in mind, you can theoretically just make them happen and you're good to go. If you understood what to do from these requirements and can do it on your own, you're good to go, if not, stay here to get more tips and tricks on how to properly fix this.
+* Variáveis de entradas de inicialização:
+  * O sistema está sendo executado no modo UEFI.
+* Mensagem de erro dizendo que variáveis EFI não são suportadas.
+  * O ssitema está sendo executado no modo Herdado
 
 ---
 
-Next sections:
+# E o macOS Nisso Tudo?
 
-Cases:
+O macOS exige um tratamento especial porque a Apple quer que seja assim (favorecendo seu próprio SO). Isso requer que um conjunto de regras seja seguido para instalá-lo em uma unidade.
 
-- No OS installed on the machine:
-  - DB on same disk
-  - DB on different disks
-- Already installed OS or existing data in the drive
-  - Systems with native UEFI support: convert your legacy booting OS to a UEFI one
-    - Linux
-    - Windows
-    - Systems with only Legacy booting only option:
-      - DUET
+* Unidade formatada em GPT.
+* Uma partição EFI com pelo menos 200MB.
 
-Good luck, and ***BACKUP YOUR DATA***.
+Com essas duas exigências em mente, você poderia, em teoria, colocá-los em prática e tudo estaria ok. Se você entendeu o que fazer a partir dessas duas exigẽncias e consegue fazer tudo sozinho, siga em frente. Caso contrário, fique conosco para descobrir as dicas sobre como arrumar tudo.
+
+---
+
+Próximas seções:
+
+Situações:
+
+* Nenhum SO instalado no computador:
+  * Dual boot na mesma unidade.
+  * Dual boot em unidades diferentes.
+* SO já instalado no computador com dados existentes na unidade:
+  * Computadores com suporte nativo a UEFI: converter seu SO herdado para UEFI.
+    * Linux
+    * Windows
+    * Computadores com inicialização herdada apenas:
+      * DUET
+
+Boa sorte e ***FAÇA BACKUP DOS SEUS DADOS***.
