@@ -6,17 +6,17 @@ Olá! Parece que você está tentando instalar o macOS e mais algum sistema oper
 
 O multiboot é afetador fortemente pelo tipo de firmware do seu computador. Este guia abordará os dois tipos conhecidos, que são:
 
-- UEFI
-- Legacy/CSM/BIOS
+* UEFI
+* Legacy/CSM/BIOS
 
 As diferenças são mínimas uma vez que estiver usando o OpenCore, mas também pode ser um pouco difícil no último caso. Este guia abordará os seguintes elementos:
 
 1. O que é multiboot e como ele funciona?
 2. Particionando vs Separando Unidades
-2. UEFI
+3. UEFI
    1. Uma unidade para todos os sistemas.
    2. Unidades diferentes para sistemas diferentes.
-3. Legacy (também referido como legado, antigo, BIOS etc.)
+4. Legacy (também referido como legado, antigo, BIOS etc.)
    1. Uma unidade para todos os sistemas.
    2. Unidades diferentes para sistemas diferentes.
 5. Solução de Problemas
