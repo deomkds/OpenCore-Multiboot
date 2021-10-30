@@ -4,15 +4,15 @@ Basicamente, esse cenário supõe que você só tem uma unida unidade vazia e qu
 
 ## Precauções
 
-- FAÇA BACKUP DOS SEUS DADOS
-- Se possível, desconecte ou desative quaisquer outras unidades do sistema, já que podem interferir com o procedimento de instalação (especialmente o Windows).
-- Verifique se a unidade não está corrompida ou possui setores defeituosos. 
-- Garanta que há uma fonte de energia estável, isto é, use uma tomada em vez da bateria do notebook, por exemplo.
+* FAÇA BACKUP DOS SEUS DADOS
+* Se possível, desconecte ou desative quaisquer outras unidades do sistema, já que podem interferir com o procedimento de instalação (especialmente o Windows).
+* Verifique se a unidade não está corrompida ou possui setores defeituosos.
+* Garanta que há uma fonte de energia estável, isto é, use uma tomada em vez da bateria do notebook, por exemplo.
 
 ## Situações Aplicáveis
 
-- Você já tem o macOS instalado.
-- Você tem uma unidade vazia, sem nenhum sistema operacional instalado.
+* Você já tem o macOS instalado.
+* Você tem uma unidade vazia, sem nenhum sistema operacional instalado.
 
 ---
 
@@ -50,7 +50,7 @@ E certifique-se de:
 
 O Windows pode ser um pé no saco quando o quesito é instalar um segundo sistema operacional (como se fosse algum tipo de insulto ou a Microsoft simplesmente não percebe que existem outros sistemas operacionais além do Windows /s). Crie seu instalador do Windows em um outro computador usando o assistente da Microsoft ou use o [Rufus](https://rufus.ie)) (Nota do tradutor: apenas use o Rufus e evite dores de cabeça.)
 
-Caso o Windows apresente problemas durante a instalação, ~~lembre-se que é o Windows~~ reinicie o instalador, remova as partições MSR/Recovery/Windows que o instalador criou (pode haver mais, então apenas certifique-se de não apagar o macOS ou partições de outros sistemas operacionais) e siga [este guia no TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html) (em inglês) que comenta sobre como instalar o Windows manualmente usando a ferramenta `dism`. 
+Caso o Windows apresente problemas durante a instalação, ~~lembre-se que é o Windows~~ reinicie o instalador, remova as partições MSR/Recovery/Windows que o instalador criou (pode haver mais, então apenas certifique-se de não apagar o macOS ou partições de outros sistemas operacionais) e siga [este guia no TenForums](https://www.tenforums.com/tutorials/84331-apply-windows-image-using-dism-instead-clean-install.html) (em inglês) que comenta sobre como instalar o Windows manualmente usando a ferramenta `dism`.
 
 #### Linux
 
