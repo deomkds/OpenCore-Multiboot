@@ -1,6 +1,6 @@
 # O que é multiboot?
 
-Multiboot é a presença de múltiplos sistemas operacionais capazes de serem inicializados a partir do mesmo dispositivo e presentes fisicamente nesse dispositivo. Você pode até dizer "é óbvio!", mas algumas pessoas não sabem que só é possível inicializar apenas **um SO** por vez. Ao contrário do que acontece na virtualização, multiboot *NÃO* carrega todos os sistemas operacionais ao mesmo tempo. Em vez disso, é preciso desligar um sistema antes de iniciar o outro. O multiboot pode ser feito em qualquer computador, seja real ou virtual, desde que o firmware seja capaz de iniciar todos os sistemas operacionais.
+Multiboot é a presença de múltiplos sistemas operacionais capazes de serem inicializados a partir do mesmo dispositivo e presentes fisicamente nesse dispositivo. Você pode até dizer "é óbvio!", mas algumas pessoas não sabem que só é possível inicializar apenas **um SO** por vez. Ao contrário do que acontece na virtualização, no multiboot, os sistemas operacionais *NÃO* são carregados todos ao mesmo tempo. Em vez disso, é preciso desligar um sistema antes de iniciar o outro. O multiboot pode ser feito em qualquer computador, seja real ou virtual, desde que o firmware consiga iniciar todos os sistemas operacionais.
 
 Aqui está uma forma de visualizar a diferença entre multiboot e virtualização:
 

@@ -4,10 +4,10 @@ Olá! Parece que você está tentando instalar o macOS e mais algum sistema oper
 
 ## Tipos de Firmware
 
-O multiboot é afetador fortemente pelo tipo de firmware do seu computador. Este guia abordará os dois tipos conhecidos, que são:
+O multiboot é afetado fortemente pelo tipo de firmware do seu computador. Este guia abordará os dois tipos conhecidos, que são:
 
 * UEFI
-* Legacy/CSM/BIOS
+* Herdado/CSM/BIOS
 
 As diferenças são mínimas uma vez que estiver usando o OpenCore, mas também pode ser um pouco difícil no último caso. Este guia abordará os seguintes elementos:
 
@@ -16,7 +16,7 @@ As diferenças são mínimas uma vez que estiver usando o OpenCore, mas também 
 3. UEFI
    1. Uma unidade para todos os sistemas.
    2. Unidades diferentes para sistemas diferentes.
-4. Legacy (também referido como legado, antigo, BIOS etc.)
+4. Herdado (também chamado de legado, antigo etc.)
    1. Uma unidade para todos os sistemas.
    2. Unidades diferentes para sistemas diferentes.
 5. Solução de Problemas
