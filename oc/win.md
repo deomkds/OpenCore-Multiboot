@@ -1,54 +1,53 @@
-# Dualbooting with Windows
+# Dualboot com o Windows
 
-* MBR based Windows installs **ARE NOT SUPPORTED** by OpenCore at this time, you will need to convert it to GPT.
+* Instalações do Windows baseadas em MBR **NÃO SÃO SUPORTADAS** pelo OpenCore nesse momento. Será necessário converte-la para GPT.
 
-#### Solution 1: If Windows is not picked up automagically, add the following to your config.plist
+#### Solução 1: Se o Windows não for encontrado automagicamente, adicione as seguintes informações na `config.plist`:
 
 ```
 Misc -> BlessOverride -> \EFI\Microsoft\Boot\bootmgfw.efi
 ```
 
-* **Note**: As of OpenCore 0.5.9, this no longer needs to be specified. OpenCore should pick up on this entry automatically
+* **Observação**: A partir do OpenCore 0.5.9, não é mais necessário especificar isso. O OpenCore deve encontrar essa entrada automaticamente.
 
 ![](../images/win-md/blessoverride.png)
 
-#### Solution 2: To make Windows get picked up, boot to recovery mode from within Windows
+#### Solução 2: Para fazer com que o Windows seja encontrado, inicie no modo de recuperação a partir do Windows:
 
-* **make sure you boot windows from OpenCore**
-  * after loading OpenCore, press space > OpenShell (make sure you have it in Tools and in the config)
-  * run `map -r -b`
-  * look for your EFI drive (usually it's in the first lines, watch out if you're a multidisk user, there might be many EFIs)
-  * run `FSX:\EFI\Microsoft\Boot\bootmgfw.efi` where X is the number of the EFI partition with windows bootloader
-* **make sure that RequestBootVarRouting is set to True**
-* open CMD/PS with admin rights
-* run `shutdown /r /o /t 0`
-  * this will reboot your windows system immediately to Advanced Boot Menu menu
-* select Troubleshoot > Command Prompt
-* it will reboot to WinRE and you'll get to the Command Prompt
-* once in there
-  * run `diskpart`
-  * once loaded, send `list vol`
-  * look for your Windows drive letter
-    * it may not have the `C` lettering, but make sure you check the size and other indicatives that points to it
-    * if you cannot, just write down the mounted letters with (NTFS) filesystem then explore them one by one to check if it's your windows install
-  * look for your EFI partition
-    * it should say `hidden` or `system` and is usually 100-200MB (some OEM installs make it bigger as much as 500MB)
-      * send `sel vol X` where X is the EFI partition number
-    * if you're in doubt
-      * send `list disk`
-      * identify your windows disk
-      * send `sel disk X` where X is the disk where Windows is installed on
-      * send `list part`
-      * check the partitions, usually the EFI should have 100-200MB (some OEM installs make it bigger as much as 500MB)
-      * send `sel part X` where X is the EFI partition number
-    * either way, send `assign letter=S`
-      * S can be anything other than A/B/Y/X and any letter already assigned in the listing before it
-  * send `exit` to close diskpart and return to the command prompt
-  * run `bcdboot X:\Windows /s S: /f UEFI`
-    * [bcdboot](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/bcdboot-command-line-options-techref-di) is a utility that installs Windows bootloader in either your EFI or root system partition (of choice)
-    * `X:\Windows` is a path to the Windows installation folder, where X is the mount letter of the Windows partition
-    * `/s S:` is the destination disk that will receive the bootloader, in our case, it's the EFI partition
-    * `/f UEFI` to specify the type the bootloader should be (UEFI Bootloader)
-    * This will copy a new bootmgfw.efi file as well as add a new NVRAM Boot entry which hopefully will now appear on OpenCore boot menu.
-* if everything ran without any errors, type `exit` and it should return you back to the Advanced Boot Menu (or reboot)
-* reboot and check if Windows boot entry has been added
+* **Certifique-se de iniciar o Windows pelo OpenCore**
+  * Após carregar o OpenCore, pressione Barra de Espaço e selecione a opção `OpenShell` (certifique-se de tê-lo na pasta `Tools` e adicionado na `config.plist`).
+  * Execute `map -r -b`.
+  * Procure pela sua unidade EFI (geralmente aparece nas primeiras linhas, mas tome cuidado caso você seja um usuário de várias unidades, pois pode haver várias EFIs).
+  * Execute `FSX:\EFI\Microsoft\Boot\bootmgfw.efi` onde X é o número da partição EFI que contém o *bootloader* do Windows.
+* **Certifique-se de que `RequestBootVarRouting` está configurado para `True`**
+* Abra o Prompt de Comando com permissões de Administrador.
+* Execute `shutdown /r /o /t 0`.
+  * Isso reiniciará o Windows imediatamente para o Menu de Inicialização Avançado.
+* Selecione Solução de Problemas > Prompt de Comando.
+* O computador reiniciará para o WinRE e o Prompt de Comando se abrirá.
+  * Execute o `diskpart`.
+  * Uma vez carregado, digite `list vol`.
+  * Procure pela letra da unidade do Windows.
+    * Pode não usar a letra `C:`, mas certifique-se de verificar o tamanho e outros indicativos de que é a unidade/partição certa.
+    * Caso não consiga, anote as letras de unidades montadas que estejam usando o sistema de arquivos NTFS e então explore uma a uma para encontrar sua instalação do Windows.
+  * Procure pela sua partição EFI.
+    * Deverá dizer `hidden` ou `system` e ter entre 100 e 200MB (algumas OEMs criam EFIs de até 500MB).
+      * Digite `sel vol X`, substituíndo X pelo número da partição EFI.
+    * Caso esteja em dúvida:
+      * Digite `list disk`.
+      * Identifique a unidade do Windows.
+      * Digite `sel disk X`, substituindo X pelo número da unidade onde o Windows está instalado.
+      * Digite `list part`.
+      * Verifique as partições, pois geralmente a EFI deve ter entre 100 e 200MB (algumas OEMs criam EFIs de até 500MB).
+      * Digite `sel part X`, substituindo X pelo número da partição EFI.
+    * De qualquer forma, digite `assign letter=S`.
+      * A letra "S" pode ser qualquer letra, desde que não seja A, B, Y, X ou qualquer outra letra que já esteja atribuída na listagem.
+  * Digite `exit` para fechar o `diskpart` e retornar para o Prompt de Comando.
+  * Execute `bcdboot X:\Windows /s S: /f UEFI`.
+    * [bcdboot](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/bcdboot-command-line-options-techref-di) (em inglês) é um utilitário que instala o *bootloader* do Windows na EFI ou na partição raíz do sistema (à sua escolha).
+    * `X:\Windows` é o caminho da pasta de instalação do Windows, onde X é a letra atribuída para a partição do Windows.
+    * `/s S:` é a unidade de destino que receberá o *bootloader*. Nesse caso, é a partição EFI.
+    * `/f UEFI` para especificar o tipo de *bootloader* que deve ser instalado (*bootloader* UEFI).
+    * Isso copiará um novo arquivo `bootmgfw.efi` assim como adicionar uma nova entrada de inicialização na NVRAM.
+* Se tudo correr sem nenhum erro, digite `exit` para retornar ao Menu de Inicialização Avançada (ou reiniciar).
+* Reinicie e veja se o Windows aparece no seletor do OpenCore.
