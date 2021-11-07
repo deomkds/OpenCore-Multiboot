@@ -49,55 +49,55 @@ O `efibootmgr` é um programa que manipula o Gerenciador de Inicialização da E
       * Verifique a seção de ponto de montagem para descobrir em qual partição está a raíz `/` do sistema (no exemplo, `sda3`).
       * O caminho `/boot/efi` possui a minha partição EFI montada (caso você tenha adicionado-a corretamente ao `fstab`, o que deveria).
       * O *bootloader*/gerenciador de inicialização está no caminho `/boot/efi`.
-      * `/boot/efi` partition number is `1` in this case (it could be `sda1` or `nvme0nXp1` or anything else), if you have your EFI in another partition please remember which number it is
+      * O número de partição da `/boot/efi` é `1` nesse caso (pode ser `sda1` ou `nvme0nXp1` ou qualquer outra coisa). Caso você tenha sua EFI em outra partição, por favor, anote o número.
 
-   2. Change the directory to where your EFI partition is mounted by running `cd /path/to/efi` (for example `cd /boot/efi`)
+   2. Mude de diretório para onde a sua partição EFI está montada executando o comando `cd /caminho/da/efi` (por exemplo `cd /boot/efi`).
 
-   3. Once you're in, you'll usually find a folder named `EFI` which contains `BOOT` and other folders, one of these folders *may* contain your bootloader/manager EFI Application binary, commonly found in
+   3. Uma vez dentro, geralmente haverá uma pasta chamada `EFI` que contém `BOOT` e outras pastas. Uma dessas pastas *pode* conter seu o binário EFI do seu *bootloader*/gerenciador de inicialização. Caminhos comuns são:
 
-      * `EFI/arch/grubx64.efi` - for Arch with grub2
-      * `EFI/ubuntu/grubx64.efi` - for Ubuntu with grub2
-      * `EFI/systemd/systemd-bootx64.efi` - for systemd-boot (path used with Arch)
-      * `EFI/fedora/grubx64.efi` - for Fedora with grub2
-      * or run `find . -iname "grubx64.efi"` or `find . -iname "systemd-bootx64.efi"` in your EFI folder (you can change the file name to whatever you're using)
+      * `EFI/arch/grubx64.efi` - para Arch com grub2.
+      * `EFI/ubuntu/grubx64.efi` - para Ubuntu com grub2.
+      * `EFI/systemd/systemd-bootx64.efi` - para systemd-boot (caminho usado pelo Arch).
+      * `EFI/fedora/grubx64.efi` - para Fedora com grub2.
+      * Ou execute `find . -iname "grubx64.efi"` ou `find . -iname "systemd-bootx64.efi"` na sua pasta EFI (você pode alterar o nome do arquivo para qualquer coisa que esteja usando).
 
-   4. Keep note of:
+   4. Anote:
 
-      * the binary path
-      * the binary's partition number
-      * the binary's disk path (`/dev/sda` or `/dev/nvme0nX`)
+      * o caminho do binário.
+      * o número da partição que contém o binário.
+      * o caminho da unidade que contém o binário (`/dev/sda` ou `/dev/nvme0nX`).
 
-4. Install `efibootmgr` in your linux system (usually it comes built-in in ubuntu, but requires install on arch for example)
+4. Instale o `efibootmgr` na sua distro Linux (geralmente vem pré-instalado no Ubuntu, mas requer instalação manual no Arch, por exemplo).
 
-5. Once installed, run as **sudoer/superuser** (or use sudo)
+5. Uma vez instalado, execute **sudoer/superuser** (ou use sudo).
 
    ```
-   efibootmgr -c -L "Linux" -l "\EFI\pathto\filex64.efi" -d "/dev/sda" -p 1
+   efibootmgr -c -L "Linux" -l "\EFI\caminhopara\arquivox64.efi" -d "/dev/sda" -p 1
    ```
 
-   * `-c`: Create
-   * `-L "Linux"`: Label the boot entry (you can change it to whatever you want)
-   * `-l "\EFI\pathto\filex64.efi"`: loader file path, must be in a format the UEFI Firmware can use, which means `\` for pathing instead of `/` you find in unix
-   * `-d "/dev/sda"`: disk path so that `efibootmgr` know which disk the UEFI firmware should read the file from, it can be `/dev/nvme0nX` (with X as a number) if you're using NVMe
-   * `-p 1`: point the partition number we found earlier, in case your EFI partition is the first one, this can be omitted
+   * `-c`: Cria.
+   * `-L "Linux"`: Nome da entrada de inicialização (você pode mudar para o que quiser).
+   * `-l "\EFI\caminhopara\arquivox64.efi"`: Caminho do arquivo carregador. Precisa estar em um formato que o firmware UEFI possa usar, o que significa usar `\` (barra invertida) para separar os diretórios no caminho, em vez da `/` (barra) comum do Unix.
+   * `-d "/dev/sda"`: Caminho da unidade, de forma que o `efibootmgr` saiba em qual unidade o firmware UEFI possa procurar pelo arquivo. Pode ser `/dev/nvme0nX` (substitua X pelo número da unidade) caso esteja usando um SSD NVMe.
+   * `-p 1`: aponta o número de partição encontrado anteriormente. Caso a sua partição EFI seja a primeira na unidade, essa opção pode ser omitida.
 
-6. Reboot and check OpenCore, **you will find a new entry named `EFI`**, there can be many as it can also point to other boot entries, that's by design by OpenCore, not a bug.
+6. Reinicie e verifique o OpenCore. **Você verá uma nova entrada chamada `EFI`**. Pode haver vários, já que ele pode apontar para outras entradas de inicialização. Isso não é um *bug*, é uma *feature* do OpenCore.
 
-**Note:**
+**Observação:**
 
-This can be used for **any EFI application** you want to add to the UEFI Boot Manager.
+Isso pode ser usado para **qualquer aplicativo EFI** que você quiser adicionar ao Gerenciador de Inicialização do Firmware UEFI.
 
-## Method B: Chainloading the kernel (must support EFISTUB)
+## Método B: Encadeando o Kernel (Precisa Suportar EFISTUB)
 
-Some linux kernels are built with EFISTUB enabled in their configuration, which makes them loadable by the UEFI firmware like a regular UEFI application (neat, right?), we can use this feature with OpenCore and let it load the kernel as an EFI application while also passing boot arguments and other information.
+Alguns *kernels* (*kérneis*?) Linux são compilados com o EFISTUB ativado em sua configuração, o que os torna carregáveis pelo firmware EFI como se fossem aplicativos EFI padrão (legal, né?). Podemos usar esse recurso com o OpenCore e deixá-lo carregar o *kernel* como se fosse um aplicativo EFI, ao mesmo tempo em que passamos argumentos de inicialização e outras informações.
 
-### 1. Identifying your root partition
+### 1. Identificando a partição raíz
 
-We first need to determine your root partition and its UUID/PARTUUID, this information will help us point to the proper partition for the kernel/system root.
+Primeiro, é preciso determinar qual é a partição raiz e seu UUID/PARTUUID. Essa informação nos ajudará a indicar a partição raiz do *kernel*/sistema correta.
 
-#### 1. Your kernel and system root are in the same partition: (using Arch in this example)
+#### 1. Seu *kernel* e raíz do sistema estão na mesma partição: (usando o Arch neste exemplo)
 
-* In a terminal window on your linux install, run `lsblk` (available in most distributions)
+* Numa janela do Terminal dentro da sua instalação Linux, execute `lsblk` (disponível na maioria das distribuições).
 
   ```shell
   $ lsblk
@@ -110,20 +110,20 @@ We first need to determine your root partition and its UUID/PARTUUID, this infor
   ...
   ```
 
-  * Check for the mount point section to get your system root `/` partition (here `sda3`)
-  * `/boot/efi` has my EFI partition mounted in it (if you properly added it in fstab, which you should)
-  * the kernel and initramfs are stored in `/boot` which is part of my main system root partition
+  * Procure pela seção de ponto de montagem para obter a partição `/` raíz do sistema (aqui, `sda3`).
+  * `/boot/efi` possui a minha partição EFI montada (caso você tenha adicionado-a corretamente ao `fstab`, o que deveria)
+  * O *kernel* e o `initramfs` estão armazenados na pasta `/boot`, que é parte da minha partição raíz principal do sistema.
 
-* Now we need to know which UUID/PARTUUID, run `blkid | grep -i <system_root_partition>` , eg: `blkid | grep -i sda3` (must be root user)
+* Agora precisamos descobrir o UUID/PARTUUID. Execute `blkid | grep -i <system_root_partition>` , ex.: `blkid | grep -i sda3` (precisa ser executado como *root*).
 
   ```shell
   # blkid | grep -i sda3
   /dev/sda3: UUID="3d4768d7-d33e-4f9f-a821-e80eba22ca62" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="a1073e53-c768-4ce5-89ad-b558669bdb89"
   ```
 
-  * You'll get both your UUID/PARTUUID, save these somewhere.
+  * Retornará tanto o UUID, quanto o PARTUUID. Anote-os em algum lugar.
 
-* Explore `/boot` and list your files, you should find your kernel and initramfs
+* Explore `/boot` e liste os arquivos. Você deverá encontrar o *kernel* e o arquivo `initramfs`.
 
   ```shell
   $ cd /boot
@@ -137,11 +137,11 @@ We first need to determine your root partition and its UUID/PARTUUID, this infor
   -rw-r--r-- 1 root root  7541344 Sep 22 23:31 vmlinuz-linux
   ```
 
-  * You see my kernel is named `vmlinuz-linux` with `initramfs-linux.img` as its initramfs, with a fallback img, but also `intel-ucode.img` for the trash intel mitigation
-    * In case you're using AMD, you might also find `amd-ucode.img`
-    * Some other distributions may have these images stored somewhere else, check your distribution and how it handles CPU ucode firmware
+  * Veja que meu *kernel* se chama `vmlinuz-linux` com o arquivo `initramfs-linux.img` servindo como seu `initramfs`. Ainda existe um arquivo `.img` como substituto. Também há um arquivo `intel-ucode.img` para a mitigação lixo da Intel.
+    * Caso esteja usando AMD, poderá encontrar um arquivo `amd-ucode.img`.
+    * Algumas outras distribuições podem armazenar essas imagens em outro lugar. Verifique a sua distribuição para saber como ela lida com firmware de microcódigo da CPU.
 
-* Reboot to OpenCore, and press Space, it should show more options, one of them should be OpenShell.efi. In case you do not have it, download the OpenCore zip, and take it from OC/Tools, and add it to your config.plist, ProperTree can do that with OC Snapshot.
+* Reinicie para o OpenCore e pressione Barra de Espaço. Mais opções devem aparecer. Uma delas deverá ser o `OpenShell.efi`. Caso não apareça, baixe o arquivo `.zip` do OpenCore, copie-o da pasta `OC/Tools` e adicione-o a sua `config.plist`. O ProperTree pode fazer isso usando a função de snapshots.
 
 #### 2. Your kernel is in your EFI partition
 

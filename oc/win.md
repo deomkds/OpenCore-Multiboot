@@ -2,7 +2,7 @@
 
 * Instalações do Windows baseadas em MBR **NÃO SÃO SUPORTADAS** pelo OpenCore nesse momento. Será necessário converte-la para GPT.
 
-#### Solução 1: Se o Windows não for encontrado automagicamente, adicione as seguintes informações na `config.plist`:
+#### Solução 1: Se o Windows não for encontrado automagicamente, adicione as seguintes informações na `config.plist`
 
 ```
 Misc -> BlessOverride -> \EFI\Microsoft\Boot\bootmgfw.efi
@@ -12,7 +12,7 @@ Misc -> BlessOverride -> \EFI\Microsoft\Boot\bootmgfw.efi
 
 ![](../images/win-md/blessoverride.png)
 
-#### Solução 2: Para fazer com que o Windows seja encontrado, inicie no modo de recuperação a partir do Windows:
+#### Solução 2: Para fazer com que o Windows seja encontrado, inicie no modo de recuperação a partir do Windows
 
 * **Certifique-se de iniciar o Windows pelo OpenCore**
   * Após carregar o OpenCore, pressione Barra de Espaço e selecione a opção `OpenShell` (certifique-se de tê-lo na pasta `Tools` e adicionado na `config.plist`).
