@@ -1,10 +1,22 @@
 # Dualboot com o Linux
 
-**EM CONSTRUÇÃO**
+## Método A: OpenLinuxBoot
 
-Nota do tradutor: a página será atualizada quando houver progresso na página original.
+O OpenCore agora inclui o driver `OpenLinuxBoot.efi` que deve tornar o dualboot com Linux uma tarefa mais fácil.
 
-## Método A: Encadeando um *bootloader* EFI (GRUB2, Systemd-boot)
+Os passos para usá-lo são:
+
+ 1. Instale o Linux normalmente, isto é, iniciando uma `.iso ` gravada em um pendrive. O `OpenLinuxBoot.efi` não está envolvido nesse estágio.
+ 2. Adicione o `OpenLinuxBoot.efi` e o `ext4_x64.efi` na `config.plist`, na seção `Drivers`.
+ 3. Certifique-se de que a opção `RequestBootVarRouting` e a opção `LauncherOption` estão ativadas na `config.plist`. Também é recomendado ativar a opção `HideAuxiliary` de forma a ocultar *kernel* (*kernéis?*) Linux antigos. Para reexibi-los, basta apertar a tecla ESPAÇO para exibir as entradas auxiliares no menu do OpenCore.
+ 4. Reinicie para o OpenCore e o Linux instalado deve aparecer.
+ 5. Nunca mais use o GRUB.
+
+Caso já tenha usado os métodos B ou C abaixo, será preciso remover as configurações para que as distribuições Linux não apareçam duas vezes no menu do OpenCore.
+
+Para mais informações sobre como o OpenLinuxBoot funciona e orientações adicionais de solução de problemas, veja a seção do OpenLinuxBoot no documento `Configuration.pdf` do OpenCore.
+
+## Método B: Encadeando um *bootloader* EFI (GRUB2, Systemd-boot)
 
 #### Método 1: Usando o BlessOverride
 
@@ -87,7 +99,7 @@ O `efibootmgr` é um programa que manipula o Gerenciador de Inicialização da E
 
 Isso pode ser usado para **qualquer aplicativo EFI** que você quiser adicionar ao Gerenciador de Inicialização do Firmware UEFI.
 
-## Método B: Encadeando o Kernel (Precisa Suportar EFISTUB)
+## Método C: Encadeando o Kernel (Precisa Suportar EFISTUB)
 
 Alguns *kernels* (*kérneis*?) Linux são compilados com o EFISTUB ativado em sua configuração, o que os torna carregáveis pelo firmware EFI como se fossem aplicativos EFI padrão (legal, né?). Podemos usar esse recurso com o OpenCore e deixá-lo carregar o *kernel* como se fosse um aplicativo EFI, ao mesmo tempo em que passamos argumentos de inicialização e outras informações.
 
