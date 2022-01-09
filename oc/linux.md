@@ -6,7 +6,7 @@ O OpenCore agora inclui o driver `OpenLinuxBoot.efi` que deve tornar o dualboot 
 
 Os passos para usá-lo são:
 
- 1. Instale o Linux normalmente, isto é, iniciando uma `.iso ` gravada em um pendrive. O `OpenLinuxBoot.efi` não está envolvido nesse estágio.
+ 1. Instale o Linux normalmente, isto é, iniciando uma `.iso` gravada em um pendrive. O `OpenLinuxBoot.efi` não está envolvido nesse estágio.
  2. Adicione o `OpenLinuxBoot.efi` e o `ext4_x64.efi` na `config.plist`, na seção `Drivers`.
  3. Certifique-se de que a opção `RequestBootVarRouting` e a opção `LauncherOption` estão ativadas na `config.plist`. Também é recomendado ativar a opção `HideAuxiliary` de forma a ocultar *kernel* (*kernéis?*) Linux antigos. Para reexibi-los, basta apertar a tecla ESPAÇO para exibir as entradas auxiliares no menu do OpenCore.
  4. Reinicie para o OpenCore e o Linux instalado deve aparecer.
